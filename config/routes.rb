@@ -1,9 +1,16 @@
 Rails.application.routes.draw do
-  resources :activities
-  resources :profiles
-  resources :locations
-  resources :instructors
-  resources :users
+
+  post '/signup', to: 'users#create'
+  get '/me', to: 'users#show'
+  post '/login', to: 'sessions#create'
+  delete '/logout', to: 'sessions#destroy'
+
+  get '/users', to: 'users#index'
+
+  resources :activities, only: [:index, :create, :update, :destroy]
+  resources :profiles, only: [:show, :create, :update, :destroy]
+  resources :locations, only: [:index, :create]
+  resources :instructors, only: [:index, :create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
@@ -12,5 +19,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  get '/hello', to: 'application#hello_world'
+  get "*path", to: "fallback#index", constraints: ->(req) { !req.xhr? && req.format.html? }
 end
