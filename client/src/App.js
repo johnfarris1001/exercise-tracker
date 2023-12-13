@@ -36,21 +36,8 @@ function App() {
     return (
         <div className="App">
             <br />
-            <NavBar />
+            <NavBar handleClick={handleClick} />
             <br />
-            <h4>
-                {user
-                    ? `You are Logged in as:  ${user.username}`
-                    : `You are not Logged in`}
-            </h4>
-            <Button
-                style={
-                    location.pathname === "/login" ? { display: "none" } : {}
-                }
-                onClick={handleClick}
-            >
-                {user ? "Logout" : "Login"}
-            </Button>
             <Outlet context={onLogin} />
         </div>
     );
