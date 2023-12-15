@@ -4,6 +4,7 @@ import About from "./components/About";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
+import Locations from "./components/Locations";
 
 const routes = [
     {
@@ -26,6 +27,10 @@ const routes = [
             {
                 path: "/profile",
                 element: <Profile />,
+            },
+            {
+                path: "/locations",
+                element: <Locations />,
             },
         ],
     },
