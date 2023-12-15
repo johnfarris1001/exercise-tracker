@@ -5,6 +5,7 @@ import { UserProvider } from "./contexts/UserContext";
 import "./index.css";
 import routes from "./routes";
 import { LocationsProvider } from "./contexts/LocationsContext";
+import { InstructorsProvider } from "./contexts/InstructorsContext";
 
 const router = createBrowserRouter(routes);
 
@@ -12,7 +13,9 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
     <UserProvider>
         <LocationsProvider>
-            <RouterProvider router={router} />
+            <InstructorsProvider>
+                <RouterProvider router={router} />
+            </InstructorsProvider>
         </LocationsProvider>
     </UserProvider>
 );

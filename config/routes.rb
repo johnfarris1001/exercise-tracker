@@ -7,11 +7,10 @@ Rails.application.routes.draw do
 
   get '/api/users', to: 'users#index'
   get '/api/locations', to: 'locations#index'
+  get '/api/instructors', to: 'instructors#index'
 
   resources :activities, only: [:index, :create, :update, :destroy]
   resources :profiles, only: [:show, :create, :update, :destroy]
-  resources :locations, only: [:index, :create]
-  resources :instructors, only: [:index, :create]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

@@ -9,7 +9,7 @@ function LocationsProvider({ children }) {
         fetch("/api/locations")
             .then((r) => r.json())
             .then((data) => setLocations(data));
-    }, [setLocations]);
+    }, []);
 
     return (
         <LocationsContext.Provider value={{ locations, setLocations }}>
