@@ -1,9 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const LocationsContext = React.createContext();
 
 function LocationsProvider({ children }) {
     const [locations, setLocations] = useState({});
+
+    useEffect(() => {
+        fetch("/api/locations")
+            .then((r) => r.json())
+            .then((data) => setLocations(data));
+    }, [setLocations]);
 
     return (
         <LocationsContext.Provider value={{ locations, setLocations }}>

@@ -5,7 +5,8 @@ Rails.application.routes.draw do
   post '/login', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
-  get '/users', to: 'users#index'
+  get '/api/users', to: 'users#index'
+  get '/api/locations', to: 'locations#index'
 
   resources :activities, only: [:index, :create, :update, :destroy]
   resources :profiles, only: [:show, :create, :update, :destroy]
