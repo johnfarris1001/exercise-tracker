@@ -5,6 +5,7 @@ import { UserContext } from "../contexts/UserContext";
 
 function NavBar({ handleClick }) {
     const { user } = useContext(UserContext);
+
     return (
         <Menu className="navbar">
             <Menu.Item>
