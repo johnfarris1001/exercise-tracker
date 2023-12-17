@@ -7,6 +7,7 @@ import Profile from "./components/Profile";
 import Locations from "./components/Locations";
 import NewLocationForm from "./forms/NewLocationForm";
 import Instructors from "./components/Instructors";
+import NewInstructorForm from "./forms/NewInstructorForm";
 
 const routes = [
     {
@@ -41,6 +42,10 @@ const routes = [
             {
                 path: "/instructors",
                 element: <Instructors />,
+            },
+            {
+                path: "/instructors/new",
+                element: <NewInstructorForm />,
             },
         ],
     },
