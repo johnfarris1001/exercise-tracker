@@ -1,14 +1,20 @@
 import { useContext } from "react";
-import { LocationsContext } from "../contexts/LocationsContext";
+import { useNavigate, Outlet } from "react-router-dom";
 import { Card, Header, Button, Divider } from "semantic-ui-react";
+import { LocationsContext } from "../contexts/LocationsContext";
 
 function Locations() {
     const { locations } = useContext(LocationsContext);
+    const navigate = useNavigate();
+
+    function handleClick() {
+        navigate("/locations/new");
+    }
 
     const locationsToDisplay = locations[0]
         ? locations.map((item) => {
               return (
-                  <Card>
+                  <Card key={item.id}>
                       <Card.Content>
                           <Card.Header>{item.name}</Card.Header>
                           <Card.Meta>{item.address}</Card.Meta>
@@ -26,7 +32,8 @@ function Locations() {
             <Header as="h1">Locations</Header>
             <Card.Group centered>{locationsToDisplay}</Card.Group>
             <Divider />
-            <Button>Create New Location</Button>
+            <Outlet />
+            <Button onClick={handleClick}>Create New Location</Button>
         </div>
     );
 }

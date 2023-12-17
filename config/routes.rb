@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   get '/api/users', to: 'users#index'
   get '/api/locations', to: 'locations#index'
+  post '/api/locations', to: 'locations#create'
   get '/api/instructors', to: 'instructors#index'
 
   resources :activities, only: [:index, :create, :update, :destroy]

@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import Locations from "./components/Locations";
+import NewLocationForm from "./forms/NewLocationForm";
 
 const routes = [
     {
@@ -31,6 +32,11 @@ const routes = [
             {
                 path: "/locations",
                 element: <Locations />,
+            },
+
+            {
+                path: "/locations/new",
+                element: <NewLocationForm />,
             },
         ],
     },
