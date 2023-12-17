@@ -1,26 +1,25 @@
 import { useContext } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import { Card, Header, Button, Divider } from "semantic-ui-react";
-import { LocationsContext } from "../contexts/LocationsContext";
+import { InstructorsContext } from "../contexts/InstructorsContext";
 
-function Locations() {
-    const { locations } = useContext(LocationsContext);
+function Instructors() {
+    const { instructors } = useContext(InstructorsContext);
     const navigate = useNavigate();
 
     function handleClick() {
-        navigate("/locations/new");
+        navigate("/instructors/new");
     }
 
-    const locationsToDisplay = locations[0]
-        ? locations.map((item) => {
+    const instructorsToDisplay = instructors[0]
+        ? instructors.map((item) => {
               return (
                   <Card key={item.id}>
                       <Card.Content>
                           <Card.Header>{item.name}</Card.Header>
-                          <Card.Meta>{item.address}</Card.Meta>
-                          <Card.Description>
-                              {item.description}
-                          </Card.Description>
+                          <Card.Meta>
+                              Years of Experience: {item.years}
+                          </Card.Meta>
                       </Card.Content>
                   </Card>
               );
@@ -30,12 +29,12 @@ function Locations() {
     return (
         <div>
             <Header as="h1">Locations</Header>
-            <Card.Group centered>{locationsToDisplay}</Card.Group>
+            <Card.Group centered>{instructorsToDisplay}</Card.Group>
             <Divider />
             <Outlet />
-            <Button onClick={handleClick}>Add New Location</Button>
+            <Button onClick={handleClick}>Add New Instructor</Button>
         </div>
     );
 }
 
-export default Locations;
+export default Instructors;

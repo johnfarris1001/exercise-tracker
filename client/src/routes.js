@@ -6,6 +6,7 @@ import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import Locations from "./components/Locations";
 import NewLocationForm from "./forms/NewLocationForm";
+import Instructors from "./components/Instructors";
 
 const routes = [
     {
@@ -33,10 +34,13 @@ const routes = [
                 path: "/locations",
                 element: <Locations />,
             },
-
             {
                 path: "/locations/new",
                 element: <NewLocationForm />,
+            },
+            {
+                path: "/instructors",
+                element: <Instructors />,
             },
         ],
     },
