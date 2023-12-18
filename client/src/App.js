@@ -17,7 +17,7 @@ function App() {
 
     const onLogin = (user) => {
         setUser(user);
-        navigate("/");
+        navigate("/profile");
     };
 
     function handleClick() {
