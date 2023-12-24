@@ -86,7 +86,9 @@ function Profile() {
                 fetch(`/api/users/${user.id}`, {
                     method: "DELETE",
                 }).then(() => {
-                    setUser(null);
+                    fetch("/logout", {
+                        method: "DELETE",
+                    }).then(() => setUser(null));
                     navigate("/");
                 });
             }
