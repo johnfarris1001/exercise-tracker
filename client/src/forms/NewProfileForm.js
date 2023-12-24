@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { Form, Divider, Button } from "semantic-ui-react";
 
 function NewProfileForm() {
+    const { createProfile } = useOutletContext();
     const navigate = useNavigate();
     const [profileInfo, setProfileInfo] = useState({
         name: "",
@@ -13,25 +14,25 @@ function NewProfileForm() {
     });
     const [errorMessages, setErrorMessages] = useState([]);
 
-    // function handleSubmit(e) {
-    //     e.preventDefault();
-    //     fetch(`/profiles/${profile.id}`, {
-    //         method: "PATCH",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //         },
-    //         body: JSON.stringify(profileInfo),
-    //     }).then((r) => {
-    //         if (r.ok) {
-    //             r.json().then((data) => {
-    //                 editProfile(data);
-    //                 navigate("/profile");
-    //             });
-    //         } else {
-    //             r.json().then((data) => setErrorMessages(data.errors));
-    //         }
-    //     });
-    // }
+    function handleSubmit(e) {
+        e.preventDefault();
+        fetch(`/profiles/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(profileInfo),
+        }).then((r) => {
+            if (r.ok) {
+                r.json().then((data) => {
+                    createProfile(data);
+                    navigate("/profile");
+                });
+            } else {
+                r.json().then((data) => setErrorMessages(data.errors));
+            }
+        });
+    }
 
     const style = {
         width: "60%",
@@ -43,7 +44,7 @@ function NewProfileForm() {
     return (
         <div>
             <Divider />
-            <Form style={style}>
+            <Form style={style} onSubmit={handleSubmit}>
                 <h3>New Profile</h3>
                 <Form.Field inline>
                     <label>Name: </label>
@@ -111,6 +112,19 @@ function NewProfileForm() {
                     />
                 </Form.Field>
                 <Button type="submit">Submit</Button>
+                <div style={{ color: "red" }}>
+                    {errorMessages.length > 0 && (
+                        <div>
+                            <br />
+                            <h5>Appointment is Invalid</h5>
+                            <ul>
+                                {errorMessages.map((error) => (
+                                    <li key={error}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </Form>
             <Divider />
         </div>

@@ -12,6 +12,10 @@ function Profile() {
         setUser({ ...user, profile: profile });
     }
 
+    function createProfile(profile) {
+        setUser({ ...user, profile: profile });
+    }
+
     if (!user) {
         return <div>Loading</div>;
     } else if (user.profile) {
@@ -63,7 +67,7 @@ function Profile() {
                         ? "Create Your Profile"
                         : "Cancel"}
                 </Button>
-                <Outlet />
+                <Outlet context={{ createProfile: createProfile }} />
             </div>
         );
     }

@@ -3,6 +3,11 @@ class ProfilesController < ApplicationController
 
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
 
+    def create
+        profile = Profile.create!(profile_params.merge!({'user_id': current_user.id}))
+        render json: profile, status: :created
+    end
+
     def update
         profile = current_user.profile
         if profile
