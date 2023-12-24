@@ -28,7 +28,7 @@ function Locations() {
         : null;
 
     return (
-        <div>
+        <div style={!locations[0] ? { display: "none" } : { padding: "10px" }}>
             <Header as="h1">Locations</Header>
             <Card.Group centered>{locationsToDisplay}</Card.Group>
             <Divider />

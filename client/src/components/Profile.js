@@ -1,10 +1,11 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import { Card, Image, Button } from "semantic-ui-react";
+import { Card, Image, Button, Divider } from "semantic-ui-react";
 
 function Profile() {
     const { user, setUser } = useContext(UserContext);
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -33,9 +34,15 @@ function Profile() {
         }
 
         function handleDeleteClick() {
-            fetch(`/profiles/${profile.id}`, {
-                method: "DELETE",
-            }).then(() => deleteProfile());
+            if (!confirmDelete) {
+                setConfirmDelete(true);
+                return;
+            } else {
+                setConfirmDelete(false);
+                fetch(`/profiles/${profile.id}`, {
+                    method: "DELETE",
+                }).then(() => deleteProfile());
+            }
         }
 
         return (
@@ -56,7 +63,9 @@ function Profile() {
                         ? "Edit Profile"
                         : "Cancel"}
                 </Button>
-                <Button onClick={handleDeleteClick}>Delete Profile</Button>
+                <Button onClick={handleDeleteClick}>
+                    {confirmDelete ? "Are You Sure?" : "Delete Profile"}
+                </Button>
             </div>
         );
     } else {
@@ -74,6 +83,8 @@ function Profile() {
                         ? "Create Your Profile"
                         : "Cancel"}
                 </Button>
+                <Divider />
+                <Button>Delete Your Account</Button>
                 <Outlet context={{ createProfile: newProfile }} />
             </div>
         );
