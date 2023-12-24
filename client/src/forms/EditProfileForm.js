@@ -112,6 +112,19 @@ function EditProfileForm() {
                     />
                 </Form.Field>
                 <Button type="submit">Submit</Button>
+                <div style={{ color: "red" }}>
+                    {errorMessages.length > 0 && (
+                        <div>
+                            <br />
+                            <h5>Appointment is Invalid</h5>
+                            <ul>
+                                {errorMessages.map((error) => (
+                                    <li key={error}>{error}</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </div>
             </Form>
             <Divider />
         </div>
