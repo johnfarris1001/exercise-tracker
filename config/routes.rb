@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   delete '/logout', to: 'sessions#destroy'
 
   get '/api/users', to: 'users#index'
+  delete '/api/users/:id', to: 'users#destroy'
   get '/api/locations', to: 'locations#index'
   post '/api/locations', to: 'locations#create'
   get '/api/instructors', to: 'instructors#index'

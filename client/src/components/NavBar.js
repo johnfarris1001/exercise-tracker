@@ -13,9 +13,6 @@ function NavBar({ handleClick }) {
                     <NavLink to="/">Home</NavLink>
                 </Menu.Item>
                 <Menu.Item>
-                    <NavLink to="/signup">SignUp</NavLink>
-                </Menu.Item>
-                <Menu.Item>
                     <NavLink to="/profile">Profile</NavLink>
                 </Menu.Item>
                 <Menu.Item>

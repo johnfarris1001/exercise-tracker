@@ -6,6 +6,7 @@ import { Card, Image, Button, Divider } from "semantic-ui-react";
 function Profile() {
     const { user, setUser } = useContext(UserContext);
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const [accountDelete, setAccountDelete] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -76,6 +77,21 @@ function Profile() {
                 navigate("/profile");
             }
         }
+
+        function handleDeleteClick() {
+            if (!accountDelete) {
+                setAccountDelete(true);
+                return;
+            } else {
+                fetch(`/api/users/${user.id}`, {
+                    method: "DELETE",
+                }).then(() => {
+                    setUser(null);
+                    navigate("/");
+                });
+            }
+        }
+
         return (
             <div>
                 <Button onClick={handleNewClick}>
@@ -84,7 +100,9 @@ function Profile() {
                         : "Cancel"}
                 </Button>
                 <Divider />
-                <Button>Delete Your Account</Button>
+                <Button onClick={handleDeleteClick}>
+                    {accountDelete ? "Are You Sure?" : "Delete Your Account"}
+                </Button>
                 <Outlet context={{ createProfile: newProfile }} />
             </div>
         );
