@@ -20,7 +20,7 @@ function Profile() {
         const inches = profile.height % 12;
         const img = profile.image ? profile.image : "/icons8-exercise-50.png";
 
-        function handleClick() {
+        function handleEditClick() {
             if (location.pathname === "/profile") {
                 navigate("/profile/edit");
             } else {
@@ -41,7 +41,7 @@ function Profile() {
                 <Outlet
                     context={{ profile: profile, editProfile: editProfile }}
                 />
-                <Button onClick={handleClick}>
+                <Button onClick={handleEditClick}>
                     {location.pathname === "/profile"
                         ? "Edit Profile"
                         : "Cancel"}
@@ -49,7 +49,23 @@ function Profile() {
             </div>
         );
     } else {
-        return <div>Create Your Profile</div>;
+        function handleNewClick() {
+            if (location.pathname === "/profile") {
+                navigate("/profile/new");
+            } else {
+                navigate("/profile");
+            }
+        }
+        return (
+            <div>
+                <Button onClick={handleNewClick}>
+                    {location.pathname === "/profile"
+                        ? "Create Your Profile"
+                        : "Cancel"}
+                </Button>
+                <Outlet />
+            </div>
+        );
     }
 }
 

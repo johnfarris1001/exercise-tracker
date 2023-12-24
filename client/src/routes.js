@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Profile from "./components/Profile";
 import EditProfileForm from "./forms/EditProfileForm";
+import NewProfileForm from "./forms/NewProfileForm";
 import Locations from "./components/Locations";
 import NewLocationForm from "./forms/NewLocationForm";
 import Instructors from "./components/Instructors";
@@ -35,6 +36,10 @@ const routes = [
                     {
                         path: "/profile/edit",
                         element: <EditProfileForm />,
+                    },
+                    {
+                        path: "/profile/new",
+                        element: <NewProfileForm />,
                     },
                 ],
             },
