@@ -8,12 +8,12 @@ function Profile() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    function editProfile(profile) {
+    function newProfile(profile) {
         setUser({ ...user, profile: profile });
     }
 
-    function createProfile(profile) {
-        setUser({ ...user, profile: profile });
+    function deleteProfile() {
+        setUser({ ...user, profile: null });
     }
 
     if (!user) {
@@ -32,6 +32,12 @@ function Profile() {
             }
         }
 
+        function handleDeleteClick() {
+            fetch(`/profiles/${profile.id}`, {
+                method: "DELETE",
+            }).then(() => deleteProfile());
+        }
+
         return (
             <div>
                 <Card centered>
@@ -43,13 +49,14 @@ function Profile() {
                     </Card.Content>
                 </Card>
                 <Outlet
-                    context={{ profile: profile, editProfile: editProfile }}
+                    context={{ profile: profile, editProfile: newProfile }}
                 />
                 <Button onClick={handleEditClick}>
                     {location.pathname === "/profile"
                         ? "Edit Profile"
                         : "Cancel"}
                 </Button>
+                <Button onClick={handleDeleteClick}>Delete Profile</Button>
             </div>
         );
     } else {
@@ -67,7 +74,7 @@ function Profile() {
                         ? "Create Your Profile"
                         : "Cancel"}
                 </Button>
-                <Outlet context={{ createProfile: createProfile }} />
+                <Outlet context={{ createProfile: newProfile }} />
             </div>
         );
     }

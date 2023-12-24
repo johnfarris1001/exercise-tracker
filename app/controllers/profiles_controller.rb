@@ -18,6 +18,16 @@ class ProfilesController < ApplicationController
         end
     end
 
+    def destroy
+        profile = current_user.profile
+        if profile
+            profile.destroy
+            head :no_content
+        else
+            render json: { error: "Profile not found" }, status: :not_found
+        end
+    end
+
     private
 
     def current_user
