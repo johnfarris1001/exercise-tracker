@@ -4,9 +4,13 @@ import { UserContext } from "../contexts/UserContext";
 import { Card, Image, Button } from "semantic-ui-react";
 
 function Profile() {
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
     const location = useLocation();
+
+    function editProfile(profile) {
+        setUser({ ...user, profile: profile });
+    }
 
     if (!user) {
         return <div>Loading</div>;
@@ -34,7 +38,9 @@ function Profile() {
                         <Card.Description>{profile.bio}</Card.Description>
                     </Card.Content>
                 </Card>
-                <Outlet context={profile} />
+                <Outlet
+                    context={{ profile: profile, editProfile: editProfile }}
+                />
                 <Button onClick={handleClick}>
                     {location.pathname === "/profile"
                         ? "Edit Profile"

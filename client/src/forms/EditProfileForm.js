@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useOutletContext, useNavigate } from "react-router-dom";
 import { Form, Divider, Button } from "semantic-ui-react";
 
 function EditProfileForm() {
-    const profile = useOutletContext();
+    const { profile, editProfile } = useOutletContext();
+    const navigate = useNavigate();
     const [profileInfo, setProfileInfo] = useState({
         name: profile.name,
         image: profile.image,
@@ -11,6 +12,27 @@ function EditProfileForm() {
         weight: profile.weight,
         bio: profile.bio,
     });
+    const [errorMessages, setErrorMessages] = useState([]);
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        fetch(`/profiles/${profile.id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(profileInfo),
+        }).then((r) => {
+            if (r.ok) {
+                r.json().then((data) => {
+                    editProfile(data);
+                    navigate("/profile");
+                });
+            } else {
+                r.json().then((data) => setErrorMessages(data.errors));
+            }
+        });
+    }
 
     const style = {
         width: "60%",
@@ -22,7 +44,7 @@ function EditProfileForm() {
     return (
         <div>
             <Divider />
-            <Form style={style}>
+            <Form style={style} onSubmit={handleSubmit}>
                 <h3>Edit Profile</h3>
                 <Form.Field inline>
                     <label>Name: </label>
@@ -63,9 +85,22 @@ function EditProfileForm() {
                         }}
                     />
                 </Form.Field>
+                <Form.Field inline>
+                    <label>Profile Picture URL: </label>
+                    <input
+                        type="text"
+                        value={profileInfo.image}
+                        onChange={(e) => {
+                            setProfileInfo({
+                                ...profileInfo,
+                                image: e.target.value,
+                            });
+                        }}
+                    />
+                </Form.Field>
                 <Form.Field>
                     <label>Bio: </label>
-                    <input
+                    <textarea
                         type="text"
                         value={profileInfo.bio}
                         onChange={(e) => {
