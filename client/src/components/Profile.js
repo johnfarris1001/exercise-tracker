@@ -1,7 +1,8 @@
 import { useContext, useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { UserContext } from "../contexts/UserContext";
-import { Card, Image, Button, Divider } from "semantic-ui-react";
+import { Card, Image, Button, Divider, Segment } from "semantic-ui-react";
+import Activities from "./Activities";
 
 function Profile() {
     const { user, setUser } = useContext(UserContext);
@@ -17,6 +18,8 @@ function Profile() {
     function deleteProfile() {
         setUser({ ...user, profile: null });
     }
+
+    console.log(user);
 
     if (!user) {
         return <div>Loading</div>;
@@ -47,27 +50,32 @@ function Profile() {
         }
 
         return (
-            <div>
-                <Card centered>
-                    <Image src={img} wrapped ui={false} />
-                    <Card.Content>
-                        <Card.Header>{profile.name}</Card.Header>
-                        <Card.Meta>{`${feet}' ${inches}", ${profile.weight} pounds`}</Card.Meta>
-                        <Card.Description>{profile.bio}</Card.Description>
-                    </Card.Content>
-                </Card>
-                <Outlet
-                    context={{ profile: profile, editProfile: newProfile }}
-                />
-                <Button onClick={handleEditClick}>
-                    {location.pathname === "/profile"
-                        ? "Edit Profile"
-                        : "Cancel"}
-                </Button>
-                <Button onClick={handleDeleteClick}>
-                    {confirmDelete ? "Are You Sure?" : "Delete Profile"}
-                </Button>
-            </div>
+            <Segment.Group horizontal>
+                <Segment>
+                    <Card centered>
+                        <Image src={img} wrapped ui={false} />
+                        <Card.Content>
+                            <Card.Header>{profile.name}</Card.Header>
+                            <Card.Meta>{`${feet}' ${inches}", ${profile.weight} pounds`}</Card.Meta>
+                            <Card.Description>{profile.bio}</Card.Description>
+                        </Card.Content>
+                    </Card>
+                    <Outlet
+                        context={{ profile: profile, editProfile: newProfile }}
+                    />
+                    <Button onClick={handleEditClick}>
+                        {location.pathname === "/profile"
+                            ? "Edit Profile"
+                            : "Cancel"}
+                    </Button>
+                    <Button onClick={handleDeleteClick}>
+                        {confirmDelete ? "Are You Sure?" : "Delete Profile"}
+                    </Button>
+                </Segment>
+                <Segment>
+                    <Activities activities={user.activities} />
+                </Segment>
+            </Segment.Group>
         );
     } else {
         function handleNewClick() {

@@ -16,9 +16,6 @@ function NavBar({ handleClick }) {
                     <NavLink to="/profile">Profile</NavLink>
                 </Menu.Item>
                 <Menu.Item>
-                    <NavLink to="/activities">Activities</NavLink>
-                </Menu.Item>
-                <Menu.Item>
                     <NavLink to="/locations">Locations</NavLink>
                 </Menu.Item>
                 <Menu.Item>

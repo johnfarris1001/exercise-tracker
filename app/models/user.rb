@@ -6,4 +6,12 @@ class User < ApplicationRecord
     has_many :instructors, through: :activities
     has_many :locations, through: :activities
     has_one :profile, dependent: :destroy
+
+    def unique_locations
+        self.locations.uniq
+    end
+
+    def unique_instructors
+        self.instructors.uniq
+    end
 end
