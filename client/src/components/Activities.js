@@ -6,8 +6,7 @@ function Activities() {
     const { user } = useOutletContext();
 
     if (user) {
-        const activities = user.activities;
-        const activitesToDisplay = activities.map((activity) => {
+        const activitesToDisplay = user.activities.map((activity) => {
             return <Activity key={activity.id} activity={activity} />;
         });
 
