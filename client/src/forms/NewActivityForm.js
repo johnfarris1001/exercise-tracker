@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { InstructorsContext } from "../contexts/InstructorsContext";
 import { LocationsContext } from "../contexts/LocationsContext";
 import { Divider, Form, Button } from "semantic-ui-react";
@@ -8,6 +8,7 @@ import { getNowDate, createDatetime } from "../datetime";
 function NewActivityForm() {
     const { instructors } = useContext(InstructorsContext);
     const { locations } = useContext(LocationsContext);
+    const { addActivity } = useOutletContext();
     const navigate = useNavigate();
     const [errorMessages, setErrorMessages] = useState([]);
     const [newActivityInfo, setNewActivityInfo] = useState({
@@ -37,7 +38,10 @@ function NewActivityForm() {
             body: JSON.stringify(newActivity),
         }).then((r) => {
             if (r.ok) {
-                r.json().then((data) => console.log(data));
+                r.json().then((data) => {
+                    addActivity(data);
+                    navigate("/activities");
+                });
             } else {
                 r.json().then((data) => setErrorMessages(data.errors));
             }

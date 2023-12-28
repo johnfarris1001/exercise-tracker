@@ -40,6 +40,7 @@ function App() {
                 context={{
                     onLogin: onLogin,
                     user: user,
+                    setUser: setUser,
                 }}
             />
         </div>

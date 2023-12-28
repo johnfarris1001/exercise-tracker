@@ -3,7 +3,15 @@ import { Table } from "semantic-ui-react";
 import Activity from "./Activity";
 
 function Activities() {
-    const { user } = useOutletContext();
+    const { user, setUser } = useOutletContext();
+
+    function addActivity(activity) {
+        const newUser = {
+            ...user,
+            activities: [...user.activities, activity],
+        };
+        setUser(newUser);
+    }
 
     if (user) {
         const activitesToDisplay = user.activities.map((activity) => {
@@ -30,7 +38,7 @@ function Activities() {
                     </Table.Header>
                     <Table.Body>{activitesToDisplay}</Table.Body>
                 </Table>
-                <Outlet />
+                <Outlet context={{ addActivity: addActivity }} />
                 <br />
                 <NavLink className="ui button" to="/activities/new">
                     Add New Activity
