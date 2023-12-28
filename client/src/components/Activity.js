@@ -1,10 +1,13 @@
 import { Table } from "semantic-ui-react";
+import { getDate } from "../datetime";
 
 function Activity({ activity }) {
-    console.log(activity.start_time);
+    const date = getDate(activity.start_time);
     return (
         <Table.Row>
-            <Table.Cell>{activity.start_time}</Table.Cell>
+            <Table.Cell>{`${date.getHours()}:${date.getMinutes()} ${
+                date.getMonth() + 1
+            }/${date.getDate()}/${date.getFullYear()}`}</Table.Cell>
             <Table.Cell>{activity.category}</Table.Cell>
             <Table.Cell>{activity.duration}</Table.Cell>
             <Table.Cell>{activity.instructor.name}</Table.Cell>
