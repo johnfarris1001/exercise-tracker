@@ -3,6 +3,7 @@ import { getDate } from "../datetime";
 
 function Activity({ activity }) {
     const date = getDate(activity.start_time);
+    console.log(activity);
     return (
         <Table.Row>
             <Table.Cell>{`${date.getHours()}:${date.getMinutes()} ${
