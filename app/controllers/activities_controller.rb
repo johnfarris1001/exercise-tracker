@@ -2,6 +2,15 @@ class ActivitiesController < ApplicationController
     wrap_parameters format: []
 
     rescue_from ActiveRecord::RecordInvalid, with: :render_unprocessable_entity_response
+    rescue_from ActiveRecord::RecordNotFound, with: :render_not_found_response
+
+    def destroy
+        activity = current_user.activities.find_by(id: params[:id])
+        if activity
+            activity.destroy
+            head :no_content
+        end
+    end
 
     def create
         activity = Activity.create!(activity_params.merge!({'user_id': current_user.id}).merge!({'start_time': params[:start_time].to_datetime}))
@@ -20,5 +29,9 @@ class ActivitiesController < ApplicationController
 
     def render_unprocessable_entity_response(invalid)
         render json: { errors: invalid.record.errors.full_messages }, status: :unprocessable_entity
+    end
+
+    def render_not_found_response
+        render json: { error: "Activity not found" }, status: :not_found
     end
 end

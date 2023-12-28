@@ -1,8 +1,21 @@
-import { Table } from "semantic-ui-react";
+import { useState } from "react";
+import { Table, Button } from "semantic-ui-react";
 import { getDate } from "../datetime";
 
-function Activity({ activity }) {
+function Activity({ activity, deleteActivity }) {
+    const [confirmDelete, setConfirmDelete] = useState(false);
     const date = getDate(activity.start_time);
+
+    function handleDeleteClick() {
+        if (!confirmDelete) {
+            setConfirmDelete(true);
+            return;
+        } else {
+            fetch(`/activities/${activity.id}`, {
+                method: "DELETE",
+            }).then(() => deleteActivity(activity));
+        }
+    }
 
     return (
         <Table.Row>
@@ -21,6 +34,12 @@ function Activity({ activity }) {
             <Table.Cell>{activity.location.name}</Table.Cell>
             <Table.Cell>{activity.intensity}</Table.Cell>
             <Table.Cell>{activity.user_rating}</Table.Cell>
+            <Table.Cell>
+                <Button>Update</Button>
+                <Button onClick={handleDeleteClick}>
+                    {confirmDelete ? "Are You Sure?" : "Delete"}
+                </Button>
+            </Table.Cell>
         </Table.Row>
     );
 }

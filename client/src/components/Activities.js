@@ -13,9 +13,22 @@ function Activities() {
         setUser(newUser);
     }
 
+    function deleteActivity(activity) {
+        const newActivities = user.activities.filter((act) => {
+            return act.id !== activity.id;
+        });
+        setUser({ ...user, activities: newActivities });
+    }
+
     if (user) {
         const activitesToDisplay = user.activities.map((activity) => {
-            return <Activity key={activity.id} activity={activity} />;
+            return (
+                <Activity
+                    key={activity.id}
+                    activity={activity}
+                    deleteActivity={deleteActivity}
+                />
+            );
         });
 
         return (
@@ -34,11 +47,16 @@ function Activities() {
                             <Table.HeaderCell>Location</Table.HeaderCell>
                             <Table.HeaderCell>Intensity</Table.HeaderCell>
                             <Table.HeaderCell>Rating</Table.HeaderCell>
+                            <Table.HeaderCell>Update/Delete</Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
                     <Table.Body>{activitesToDisplay}</Table.Body>
                 </Table>
-                <Outlet context={{ addActivity: addActivity }} />
+                <Outlet
+                    context={{
+                        addActivity: addActivity,
+                    }}
+                />
                 <br />
                 <NavLink className="ui button" to="/activities/new">
                     Add New Activity
