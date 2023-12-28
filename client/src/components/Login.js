@@ -6,7 +6,7 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [errorMessages, setErrorMessages] = useState([]);
-    const onLogin = useOutletContext();
+    const { onLogin } = useOutletContext();
 
     function handleSubmit(e) {
         e.preventDefault();

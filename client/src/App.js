@@ -36,7 +36,12 @@ function App() {
             <br />
             <NavBar handleClick={handleClick} />
             <br />
-            <Outlet context={{ onLogin: onLogin, user: user }} />
+            <Outlet
+                context={{
+                    onLogin: onLogin,
+                    user: user,
+                }}
+            />
         </div>
     );
 }

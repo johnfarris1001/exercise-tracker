@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { Button, Segment } from "semantic-ui-react";
 import Profile from "./Profile";
-import Activities from "./Activities";
 
 function UserPage() {
     const { user, setUser } = useContext(UserContext);
@@ -27,6 +26,7 @@ function UserPage() {
 
         return (
             <div style={{ padding: "15px" }}>
+                <h1>{user.username}'s Info Page</h1>
                 <Button onClick={handleProfileDisplay}>
                     {showProfile ? "Hide Profile" : "Show Profile"}
                 </Button>
@@ -40,7 +40,7 @@ function UserPage() {
                         />
                     </Segment>
                     <Segment>
-                        <Activities activities={user.activities} />
+                        <h1>This is a PlaceHolder</h1>
                     </Segment>
                 </Segment.Group>
             </div>
