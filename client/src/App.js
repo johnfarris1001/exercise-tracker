@@ -15,10 +15,10 @@ function App() {
         });
     }, [setUser]);
 
-    const onLogin = (user) => {
+    function onLogin(user) {
         setUser(user);
         navigate("/profile");
-    };
+    }
 
     function handleClick() {
         if (user) {

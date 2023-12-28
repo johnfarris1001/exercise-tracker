@@ -3,9 +3,10 @@ import ErrorPage from "./components/ErrorPage";
 import About from "./components/About";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Profile from "./components/Profile";
+import UserPage from "./components/UserPage";
 import EditProfileForm from "./forms/EditProfileForm";
 import NewProfileForm from "./forms/NewProfileForm";
+import NewActivityForm from "./forms/NewActivityForm";
 import Locations from "./components/Locations";
 import NewLocationForm from "./forms/NewLocationForm";
 import Instructors from "./components/Instructors";
@@ -31,7 +32,7 @@ const routes = [
             },
             {
                 path: "/profile",
-                element: <Profile />,
+                element: <UserPage />,
                 children: [
                     {
                         path: "/profile/edit",
@@ -40,6 +41,10 @@ const routes = [
                     {
                         path: "/profile/new",
                         element: <NewProfileForm />,
+                    },
+                    {
+                        path: "/profile/activities",
+                        element: <NewActivityForm />,
                     },
                 ],
             },

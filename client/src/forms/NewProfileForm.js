@@ -35,7 +35,7 @@ function NewProfileForm() {
     }
 
     const style = {
-        width: "60%",
+        width: "90%",
         margin: "auto",
         padding: "20px",
         border: "solid",
