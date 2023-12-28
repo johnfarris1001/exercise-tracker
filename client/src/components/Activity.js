@@ -1,6 +1,7 @@
 import { Table } from "semantic-ui-react";
 
 function Activity({ activity }) {
+    console.log(activity.start_time);
     return (
         <Table.Row>
             <Table.Cell>{activity.start_time}</Table.Cell>

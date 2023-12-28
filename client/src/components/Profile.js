@@ -8,6 +8,7 @@ function Profile() {
     const { user, setUser } = useContext(UserContext);
     const [confirmDelete, setConfirmDelete] = useState(false);
     const [accountDelete, setAccountDelete] = useState(false);
+    const [showProfile, setShowProfile] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -49,33 +50,47 @@ function Profile() {
             }
         }
 
+        function handleProfileDisplay() {
+            setShowProfile(!showProfile);
+        }
+
         return (
-            <Segment.Group horizontal>
-                <Segment>
-                    <Card centered>
-                        <Image src={img} wrapped ui={false} />
-                        <Card.Content>
-                            <Card.Header>{profile.name}</Card.Header>
-                            <Card.Meta>{`${feet}' ${inches}", ${profile.weight} pounds`}</Card.Meta>
-                            <Card.Description>{profile.bio}</Card.Description>
-                        </Card.Content>
-                    </Card>
-                    <Outlet
-                        context={{ profile: profile, editProfile: newProfile }}
-                    />
-                    <Button onClick={handleEditClick}>
-                        {location.pathname === "/profile"
-                            ? "Edit Profile"
-                            : "Cancel"}
-                    </Button>
-                    <Button onClick={handleDeleteClick}>
-                        {confirmDelete ? "Are You Sure?" : "Delete Profile"}
-                    </Button>
-                </Segment>
-                <Segment>
-                    <Activities activities={user.activities} />
-                </Segment>
-            </Segment.Group>
+            <div>
+                <Button onClick={handleProfileDisplay}>
+                    {showProfile ? "Hide Profile Info" : "Show Profile Info"}
+                </Button>
+                <Segment.Group horizontal>
+                    <Segment style={showProfile ? {} : { display: "none" }}>
+                        <Card centered>
+                            <Image src={img} wrapped ui={false} />
+                            <Card.Content>
+                                <Card.Header>{profile.name}</Card.Header>
+                                <Card.Meta>{`${feet}' ${inches}", ${profile.weight} pounds`}</Card.Meta>
+                                <Card.Description>
+                                    {profile.bio}
+                                </Card.Description>
+                            </Card.Content>
+                        </Card>
+                        <Outlet
+                            context={{
+                                profile: profile,
+                                editProfile: newProfile,
+                            }}
+                        />
+                        <Button onClick={handleEditClick}>
+                            {location.pathname === "/profile"
+                                ? "Edit Profile"
+                                : "Cancel"}
+                        </Button>
+                        <Button onClick={handleDeleteClick}>
+                            {confirmDelete ? "Are You Sure?" : "Delete Profile"}
+                        </Button>
+                    </Segment>
+                    <Segment>
+                        <Activities activities={user.activities} />
+                    </Segment>
+                </Segment.Group>
+            </div>
         );
     } else {
         function handleNewClick() {
