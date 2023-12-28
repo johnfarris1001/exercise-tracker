@@ -3,10 +3,16 @@ import { getDate } from "../datetime";
 
 function Activity({ activity }) {
     const date = getDate(activity.start_time);
-    console.log(activity);
+
     return (
         <Table.Row>
-            <Table.Cell>{`${date.getHours()}:${date.getMinutes()} ${
+            <Table.Cell>{`${date.getHours()}:${
+                date.getMinutes() === 0
+                    ? "00"
+                    : date.getMinutes() < 10
+                    ? `0${date.getMinutes()}`
+                    : date.getMinutes()
+            } ${
                 date.getMonth() + 1
             }/${date.getDate()}/${date.getFullYear()}`}</Table.Cell>
             <Table.Cell>{activity.category}</Table.Cell>
