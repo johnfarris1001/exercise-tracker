@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import { Button, Segment } from "semantic-ui-react";
 import Profile from "./Profile";
+import DataTable from "./DataTable";
 
 function UserPage() {
     const { user, setUser } = useContext(UserContext);
@@ -38,7 +39,7 @@ function UserPage() {
                         />
                     </Segment>
                     <Segment>
-                        <h1>This is a PlaceHolder</h1>
+                        <DataTable user={user} />
                     </Segment>
                 </Segment.Group>
             </div>
