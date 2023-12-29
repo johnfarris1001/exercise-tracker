@@ -1,20 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
+import React, { useState, useEffect } from "react";
 
 const InstructorsContext = React.createContext();
 
 function InstructorsProvider({ children }) {
     const [instructors, setInstructors] = useState({});
-    const { user } = useContext(UserContext);
 
     useEffect(() => {
+        getInstructors();
+    }, []);
+
+    function getInstructors() {
         fetch("/api/instructors")
             .then((r) => r.json())
             .then((data) => setInstructors(data));
-    }, [user]);
+    }
 
     return (
-        <InstructorsContext.Provider value={{ instructors, setInstructors }}>
+        <InstructorsContext.Provider
+            value={{ instructors, setInstructors, getInstructors }}
+        >
             {children}
         </InstructorsContext.Provider>
     );

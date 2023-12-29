@@ -1,20 +1,24 @@
-import React, { useState, useEffect, useContext } from "react";
-import { UserContext } from "./UserContext";
+import React, { useState, useEffect } from "react";
 
 const LocationsContext = React.createContext();
 
 function LocationsProvider({ children }) {
     const [locations, setLocations] = useState({});
-    const { user } = useContext(UserContext);
 
     useEffect(() => {
+        getLocations();
+    }, []);
+
+    function getLocations() {
         fetch("/api/locations")
             .then((r) => r.json())
             .then((data) => setLocations(data));
-    }, [user]);
+    }
 
     return (
-        <LocationsContext.Provider value={{ locations, setLocations }}>
+        <LocationsContext.Provider
+            value={{ locations, setLocations, getLocations }}
+        >
             {children}
         </LocationsContext.Provider>
     );

@@ -2,9 +2,13 @@ import NavBar from "./components/NavBar";
 import { useContext, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 import { UserContext } from "./contexts/UserContext";
+import { InstructorsContext } from "./contexts/InstructorsContext";
+import { LocationsContext } from "./contexts/LocationsContext";
 
 function App() {
     const { user, setUser } = useContext(UserContext);
+    const { setInstructors, getInstructors } = useContext(InstructorsContext);
+    const { setLocations, getLocations } = useContext(LocationsContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -17,6 +21,8 @@ function App() {
 
     function onLogin(user) {
         setUser(user);
+        getInstructors();
+        getLocations();
         navigate("/profile");
     }
 
@@ -26,6 +32,8 @@ function App() {
                 method: "DELETE",
             }).then(() => setUser(null));
             navigate("/");
+            setInstructors([]);
+            setLocations([]);
         } else {
             navigate("/login");
         }

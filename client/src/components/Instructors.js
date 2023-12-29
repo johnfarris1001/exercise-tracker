@@ -30,7 +30,7 @@ function Instructors() {
         <div
             style={!instructors[0] ? { display: "none" } : { padding: "10px" }}
         >
-            <Header as="h1">Locations</Header>
+            <Header as="h1">Instructors</Header>
             <Card.Group centered>{instructorsToDisplay}</Card.Group>
             <Divider />
             <Outlet />

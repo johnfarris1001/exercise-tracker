@@ -15,8 +15,6 @@ function UserPage() {
         setUser({ ...user, profile: null });
     }
 
-    console.log(user);
-
     if (!user) {
         return <div>Loading</div>;
     } else {
