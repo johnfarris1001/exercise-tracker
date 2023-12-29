@@ -1,17 +1,19 @@
-import { useState, useContext } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { useState, useContext, useEffect } from "react";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { InstructorsContext } from "../contexts/InstructorsContext";
 import { LocationsContext } from "../contexts/LocationsContext";
 import { Divider, Form, Button } from "semantic-ui-react";
-import { getNowDate, createDatetime } from "../datetime";
+import { getNowDate, createDatetime, getDate } from "../datetime";
 
-function NewActivityForm() {
+function EditActivityForm() {
     const { instructors } = useContext(InstructorsContext);
     const { locations } = useContext(LocationsContext);
-    const { addActivity } = useOutletContext();
+    const { activities, editActivity } = useOutletContext();
+    const params = useParams();
+    const activity = activities.find((act) => act.id === parseInt(params.id));
     const navigate = useNavigate();
     const [errorMessages, setErrorMessages] = useState([]);
-    const [newActivityInfo, setNewActivityInfo] = useState({
+    const [activityInfo, setActivityInfo] = useState({
         date: getNowDate().toISOString().split("T")[0],
         time: getNowDate().toISOString().split("T")[1].slice(0, 5),
         category: "",
@@ -22,25 +24,42 @@ function NewActivityForm() {
         user_rating: 5,
     });
 
-    function handleNewActivity(e) {
+    useEffect(() => {
+        if (activity) {
+            const date = getDate(activity.start_time);
+            setActivityInfo({
+                category: activity.category,
+                duration: activity.duration,
+                instructor_id: activity.instructor.id,
+                location_id: activity.location.id,
+                intensity: activity.intensity,
+                user_rating: activity.user_rating,
+                date: `${date.getFullYear()}-${
+                    date.getMonth() + 1
+                }-${date.getDate()}`,
+                time: `${date.getHours()}:${
+                    date.getMinutes() === 0
+                        ? "00"
+                        : date.getMinutes() < 10
+                        ? `0${date.getMinutes()}`
+                        : date.getMinutes()
+                }`,
+            });
+        }
+    }, [activity]);
+
+    function handleEditActivity(e) {
         e.preventDefault();
-        const newActivity = {
-            ...newActivityInfo,
-            start_time: createDatetime(
-                newActivityInfo.date,
-                newActivityInfo.time
-            ),
-        };
-        fetch("/activities", {
-            method: "POST",
+        fetch(`/activities/${activity.id}`, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(newActivity),
+            body: JSON.stringify(activityInfo),
         }).then((r) => {
             if (r.ok) {
                 r.json().then((data) => {
-                    addActivity(data);
+                    editActivity(data);
                     navigate("/activities");
                 });
             } else {
@@ -80,17 +99,17 @@ function NewActivityForm() {
     return (
         <div>
             <Divider />
-            <Form style={style} onSubmit={handleNewActivity}>
-                <h3 style={{ textAlign: "center" }}>New Activity</h3>
+            <Form style={style} onSubmit={handleEditActivity}>
+                <h3 style={{ textAlign: "center" }}>Update Activity</h3>
                 <Form.Group widths="equal">
                     <Form.Field>
                         <label>Date: </label>
                         <input
                             type="date"
-                            value={newActivityInfo.date}
+                            value={activityInfo.date}
                             onChange={(e) => {
-                                setNewActivityInfo({
-                                    ...newActivityInfo,
+                                setActivityInfo({
+                                    ...activityInfo,
                                     date: e.target.value,
                                 });
                             }}
@@ -100,10 +119,10 @@ function NewActivityForm() {
                         <label>Start Time: </label>
                         <input
                             type="time"
-                            value={newActivityInfo.time}
+                            value={activityInfo.time}
                             onChange={(e) => {
-                                setNewActivityInfo({
-                                    ...newActivityInfo,
+                                setActivityInfo({
+                                    ...activityInfo,
                                     time: e.target.value,
                                 });
                             }}
@@ -115,10 +134,10 @@ function NewActivityForm() {
                         <label>Type: </label>
                         <input
                             type="text"
-                            value={newActivityInfo.category}
+                            value={activityInfo.category}
                             onChange={(e) => {
-                                setNewActivityInfo({
-                                    ...newActivityInfo,
+                                setActivityInfo({
+                                    ...activityInfo,
                                     category: e.target.value,
                                 });
                             }}
@@ -128,11 +147,11 @@ function NewActivityForm() {
                         <label>Duration (minutes):</label>
                         <input
                             type="number"
-                            value={newActivityInfo.duration}
+                            value={activityInfo.duration}
                             onChange={(e) => {
                                 if (e.target.value >= 0) {
-                                    setNewActivityInfo({
-                                        ...newActivityInfo,
+                                    setActivityInfo({
+                                        ...activityInfo,
                                         duration: e.target.value,
                                     });
                                 }
@@ -144,10 +163,10 @@ function NewActivityForm() {
                     <Form.Select
                         label="Instructor: "
                         options={instructorOptions}
-                        value={newActivityInfo.instructor_id}
+                        value={activityInfo.instructor_id}
                         onChange={(e) => {
-                            setNewActivityInfo({
-                                ...newActivityInfo,
+                            setActivityInfo({
+                                ...activityInfo,
                                 instructor_id: instructorOptions.filter(
                                     (inst) => {
                                         return (
@@ -162,10 +181,10 @@ function NewActivityForm() {
                     <Form.Select
                         label="Locations: "
                         options={locationOptions}
-                        value={newActivityInfo.location_id}
+                        value={activityInfo.location_id}
                         onChange={(e) => {
-                            setNewActivityInfo({
-                                ...newActivityInfo,
+                            setActivityInfo({
+                                ...activityInfo,
                                 location_id: locationOptions.filter((loc) => {
                                     return (
                                         loc.text ===
@@ -181,14 +200,14 @@ function NewActivityForm() {
                         <label>Intensity (1-10):</label>
                         <input
                             type="number"
-                            value={newActivityInfo.intensity}
+                            value={activityInfo.intensity}
                             onChange={(e) => {
                                 if (
                                     e.target.value > 0 &&
                                     e.target.value <= 10
                                 ) {
-                                    setNewActivityInfo({
-                                        ...newActivityInfo,
+                                    setActivityInfo({
+                                        ...activityInfo,
                                         intensity: e.target.value,
                                     });
                                 }
@@ -199,11 +218,11 @@ function NewActivityForm() {
                         <label>Rating (1-5):</label>
                         <input
                             type="number"
-                            value={newActivityInfo.user_rating}
+                            value={activityInfo.user_rating}
                             onChange={(e) => {
                                 if (e.target.value > 0 && e.target.value <= 5) {
-                                    setNewActivityInfo({
-                                        ...newActivityInfo,
+                                    setActivityInfo({
+                                        ...activityInfo,
                                         user_rating: e.target.value,
                                     });
                                 }
@@ -231,4 +250,4 @@ function NewActivityForm() {
     );
 }
 
-export default NewActivityForm;
+export default EditActivityForm;

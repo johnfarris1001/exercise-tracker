@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Table, Button } from "semantic-ui-react";
 import { getDate } from "../datetime";
 
 function Activity({ activity, deleteActivity }) {
     const [confirmDelete, setConfirmDelete] = useState(false);
+    const navigate = useNavigate();
     const date = getDate(activity.start_time);
 
     function handleDeleteClick() {
@@ -13,7 +15,10 @@ function Activity({ activity, deleteActivity }) {
         } else {
             fetch(`/activities/${activity.id}`, {
                 method: "DELETE",
-            }).then(() => deleteActivity(activity));
+            }).then(() => {
+                deleteActivity(activity);
+                navigate("/activities");
+            });
         }
     }
 
@@ -35,7 +40,11 @@ function Activity({ activity, deleteActivity }) {
             <Table.Cell>{activity.intensity}</Table.Cell>
             <Table.Cell>{activity.user_rating}</Table.Cell>
             <Table.Cell>
-                <Button>Update</Button>
+                <Button
+                    onClick={() => navigate(`/activities/${activity.id}/edit`)}
+                >
+                    Update
+                </Button>
                 <Button onClick={handleDeleteClick}>
                     {confirmDelete ? "Are You Sure?" : "Delete"}
                 </Button>

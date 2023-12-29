@@ -20,6 +20,17 @@ function Activities() {
         setUser({ ...user, activities: newActivities });
     }
 
+    function editActivity(activity) {
+        const newActivities = user.activities.map((act) => {
+            if (activity.id === act.id) {
+                return activity;
+            } else {
+                return act;
+            }
+        });
+        setUser({ ...user, activities: newActivities });
+    }
+
     if (user) {
         const activitesToDisplay = user.activities.map((activity) => {
             return (
@@ -55,6 +66,8 @@ function Activities() {
                 <Outlet
                     context={{
                         addActivity: addActivity,
+                        activities: user.activities,
+                        editActivity: editActivity,
                     }}
                 />
                 <br />

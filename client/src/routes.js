@@ -12,6 +12,7 @@ import Locations from "./components/Locations";
 import NewLocationForm from "./forms/NewLocationForm";
 import Instructors from "./components/Instructors";
 import NewInstructorForm from "./forms/NewInstructorForm";
+import EditActivityForm from "./forms/EditActivityForm";
 
 const routes = [
     {
@@ -52,6 +53,10 @@ const routes = [
                     {
                         path: "/activities/new",
                         element: <NewActivityForm />,
+                    },
+                    {
+                        path: "/activities/:id/edit",
+                        element: <EditActivityForm />,
                     },
                 ],
             },

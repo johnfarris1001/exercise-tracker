@@ -17,6 +17,14 @@ class ActivitiesController < ApplicationController
         render json: activity, status: :created
     end
 
+    def update
+        activity = current_user.activities.find_by(id: params[:id])
+        if activity
+            activity.update!(activity_params)
+            render json: activity, status: :accepted
+        end
+    end
+
     private
 
     def current_user
@@ -24,7 +32,7 @@ class ActivitiesController < ApplicationController
     end
 
     def activity_params
-        params.permit(:category, :duration, :instructor_id, :location_id, :intensity)
+        params.permit(:category, :duration, :instructor_id, :location_id, :intensity, :user_rating)
     end
 
     def render_unprocessable_entity_response(invalid)
