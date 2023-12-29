@@ -34,9 +34,9 @@ function EditActivityForm() {
                 location_id: activity.location.id,
                 intensity: activity.intensity,
                 user_rating: activity.user_rating,
-                date: `${date.getFullYear()}-${
-                    date.getMonth() + 1
-                }-${date.getDate()}`,
+                date: `${date.getFullYear()}-${date.getMonth() + 1}-${
+                    date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
+                }`,
                 time: `${date.getHours()}:${
                     date.getMinutes() === 0
                         ? "00"
@@ -50,12 +50,16 @@ function EditActivityForm() {
 
     function handleEditActivity(e) {
         e.preventDefault();
+        const newActivity = {
+            ...activityInfo,
+            start_time: createDatetime(activityInfo.date, activityInfo.time),
+        };
         fetch(`/activities/${activity.id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(activityInfo),
+            body: JSON.stringify(newActivity),
         }).then((r) => {
             if (r.ok) {
                 r.json().then((data) => {

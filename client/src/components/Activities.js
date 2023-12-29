@@ -32,7 +32,10 @@ function Activities() {
     }
 
     if (user) {
-        const activitesToDisplay = user.activities.map((activity) => {
+        const sortedActivities = user.activities.sort((a, b) =>
+            a.start_time.localeCompare(b.start_time)
+        );
+        const activitesToDisplay = sortedActivities.map((activity) => {
             return (
                 <Activity
                     key={activity.id}

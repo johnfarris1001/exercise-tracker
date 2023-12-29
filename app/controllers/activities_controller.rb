@@ -20,7 +20,7 @@ class ActivitiesController < ApplicationController
     def update
         activity = current_user.activities.find_by(id: params[:id])
         if activity
-            activity.update!(activity_params)
+            activity.update!(activity_params.merge!({'start_time': params[:start_time].to_datetime}))
             render json: activity, status: :accepted
         end
     end
