@@ -6,9 +6,17 @@ function Activities() {
     const { user, setUser } = useOutletContext();
 
     function addActivity(activity) {
+        const newUniqueInstructors = user.unique_instructors.filter((inst) => {
+            return inst.id !== activity.instructor.id;
+        });
+        const newUniqueLocations = user.unique_locations.filter((loc) => {
+            return loc.id !== activity.location.id;
+        });
         const newUser = {
             ...user,
             activities: [...user.activities, activity],
+            unique_instructors: [...newUniqueInstructors, activity.instructor],
+            unique_locations: [...newUniqueLocations, activity.location],
         };
         setUser(newUser);
     }
@@ -17,7 +25,18 @@ function Activities() {
         const newActivities = user.activities.filter((act) => {
             return act.id !== activity.id;
         });
-        setUser({ ...user, activities: newActivities });
+        const newUniqueInstructors = user.unique_instructors.filter((inst) => {
+            return newActivities.some((act) => act.instructor.id === inst.id);
+        });
+        const newUniqueLocations = user.unique_locations.filter((loc) => {
+            return newActivities.some((act) => act.location.id === loc.id);
+        });
+        setUser({
+            ...user,
+            activities: newActivities,
+            unique_instructors: newUniqueInstructors,
+            unique_locations: newUniqueLocations,
+        });
     }
 
     function editActivity(activity) {
@@ -28,7 +47,28 @@ function Activities() {
                 return act;
             }
         });
-        setUser({ ...user, activities: newActivities });
+        const newUniqueInstructors = user.unique_instructors
+            .filter((inst) => {
+                return newActivities.some(
+                    (act) => act.instructor.id === inst.id
+                );
+            })
+            .filter((instructor) => {
+                return instructor.id !== activity.instructor.id;
+            });
+        const newUniqueLocations = user.unique_locations
+            .filter((loc) => {
+                return newActivities.some((act) => act.location.id === loc.id);
+            })
+            .filter((location) => {
+                return location.id !== activity.location.id;
+            });
+        setUser({
+            ...user,
+            activities: newActivities,
+            unique_instructors: [...newUniqueInstructors, activity.instructor],
+            unique_locations: [...newUniqueLocations, activity.location],
+        });
     }
 
     if (user) {

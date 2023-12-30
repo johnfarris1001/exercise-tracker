@@ -1,7 +1,6 @@
 import { List, Segment, Card } from "semantic-ui-react";
 
 function DataTable({ user }) {
-    console.log(user);
     const number = user.activities.length;
     const totalDuration = user.activities.reduce(
         (n, { duration }) => n + duration,
