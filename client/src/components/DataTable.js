@@ -112,14 +112,15 @@ function DataTable({ user }) {
                             Total Active Minutes: {totalDuration}
                         </List.Item>
                         <List.Item style={style}>
-                            Average Duration: {roundTwo(totalDuration / number)}
+                            Average Duration: {roundTwo(totalDuration / number)}{" "}
+                            minutes
                         </List.Item>
                         <List.Item style={style}>
                             Average Intensity:{" "}
-                            {roundTwo(totalIntensity / number)}
+                            {roundTwo(totalIntensity / number)} / 10
                         </List.Item>
                         <List.Item style={style}>
-                            Average Rating: {roundTwo(totalRating / number)}
+                            Average Rating: {roundTwo(totalRating / number)} / 5
                         </List.Item>
                     </List>
                 </Segment>
