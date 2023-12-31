@@ -56,12 +56,9 @@ function DataTable({ user }) {
             return (
                 <Card key={inst.id} fluid>
                     <Card.Header>{inst.name}</Card.Header>
+                    <Card.Meta>Activities: {activities.length}</Card.Meta>
                     <Card.Meta>
-                        Number of Activities: {activities.length}
-                    </Card.Meta>
-                    <Card.Meta>
-                        Average Rating:{" "}
-                        {roundTwo(instRating / activities.length)}
+                        Rating: {roundTwo(instRating / activities.length)}
                     </Card.Meta>
                 </Card>
             );
@@ -82,12 +79,9 @@ function DataTable({ user }) {
             return (
                 <Card key={loc.id} fluid>
                     <Card.Header>{loc.name}</Card.Header>
+                    <Card.Meta>Activities: {activities.length}</Card.Meta>
                     <Card.Meta>
-                        Number of Activities: {activities.length}
-                    </Card.Meta>
-                    <Card.Meta>
-                        Average Rating:{" "}
-                        {roundTwo(locRating / activities.length)}
+                        Rating: {roundTwo(locRating / activities.length)}
                     </Card.Meta>
                 </Card>
             );
@@ -104,7 +98,7 @@ function DataTable({ user }) {
                 onChange={(e, { value }) => setWeeksAgo(value)}
             />
             <Segment.Group horizontal>
-                <Segment>
+                <Segment style={{ minWidth: "150px" }}>
                     <h4>Activities</h4>
                     <List style={{ textAlign: "left" }}>
                         <List.Item>Number of Activities: {number}</List.Item>
@@ -124,11 +118,23 @@ function DataTable({ user }) {
                         </List.Item>
                     </List>
                 </Segment>
-                <Segment>
+                <Segment
+                    style={{
+                        minWidth: "150px",
+                        overflow: "auto",
+                        maxHeight: "500px",
+                    }}
+                >
                     <h4>Instructors</h4>
                     <Card.Group>{instructorCards}</Card.Group>
                 </Segment>
-                <Segment>
+                <Segment
+                    style={{
+                        minWidth: "150px",
+                        overflow: "auto",
+                        maxHeight: "500px",
+                    }}
+                >
                     <h4>Locations</h4>
                     <Card.Group>{locationCards}</Card.Group>
                 </Segment>

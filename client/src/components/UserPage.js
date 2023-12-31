@@ -31,7 +31,13 @@ function UserPage() {
                     {showProfile ? "Hide Profile" : "Show Profile"}
                 </Button>
                 <Segment.Group horizontal>
-                    <Segment style={showProfile ? {} : { display: "none" }}>
+                    <Segment
+                        style={
+                            showProfile
+                                ? { minWidth: "200px" }
+                                : { display: "none" }
+                        }
+                    >
                         <Profile
                             user={user}
                             setUser={setUser}
