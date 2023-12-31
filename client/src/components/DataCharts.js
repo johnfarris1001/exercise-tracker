@@ -6,8 +6,7 @@ import CanvasJSReact from "@canvasjs/react-charts";
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-weekOptions.shift();
+const chartWeeks = [...weekOptions].splice(1);
 
 function DataCharts({ user }) {
     const [weeksAgo, setWeeksAgo] = useState(0);
@@ -123,7 +122,7 @@ function DataCharts({ user }) {
             <Dropdown
                 selection
                 search
-                options={weekOptions}
+                options={chartWeeks}
                 value={weeksAgo}
                 onChange={(e, { value }) => setWeeksAgo(value)}
             />
