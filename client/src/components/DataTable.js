@@ -1,16 +1,33 @@
-import { List, Segment, Card } from "semantic-ui-react";
+import { useState } from "react";
+import { List, Segment, Card, Dropdown } from "semantic-ui-react";
+import weekOptions from "../weeks";
 
 function DataTable({ user }) {
-    const number = user.activities.length;
-    const totalDuration = user.activities.reduce(
+    const [weeksAgo, setWeeksAgo] = useState(-1);
+
+    console.log(weeksAgo);
+
+    const activeActivities = user.activities.filter((act) => {
+        if (weeksAgo === -1) {
+            return true;
+        } else {
+            //return true if start date is in week
+        }
+    });
+
+    const number = activeActivities.length;
+
+    const style = number === 0 ? { display: "none" } : {};
+
+    const totalDuration = activeActivities.reduce(
         (n, { duration }) => n + duration,
         0
     );
-    const totalIntensity = user.activities.reduce(
+    const totalIntensity = activeActivities.reduce(
         (n, { intensity }) => n + intensity,
         0
     );
-    const totalRating = user.activities.reduce(
+    const totalRating = activeActivities.reduce(
         (n, { user_rating }) => n + user_rating,
         0
     );
@@ -20,7 +37,7 @@ function DataTable({ user }) {
     }
 
     const instructorCards = user.unique_instructors.map((inst) => {
-        const activities = user.activities.filter((act) => {
+        const activities = activeActivities.filter((act) => {
             return inst.id === act.instructor.id;
         });
         const instRating = activities.reduce(
@@ -28,7 +45,7 @@ function DataTable({ user }) {
             0
         );
         return (
-            <Card key={inst.id} fluid>
+            <Card key={inst.id} fluid style={style}>
                 <Card.Header>{inst.name}</Card.Header>
                 <Card.Meta>Number of Activities: {activities.length}</Card.Meta>
                 <Card.Meta>
@@ -39,7 +56,7 @@ function DataTable({ user }) {
     });
 
     const locationCards = user.unique_locations.map((loc) => {
-        const activities = user.activities.filter((act) => {
+        const activities = activeActivities.filter((act) => {
             return loc.id === act.location.id;
         });
         const locRating = activities.reduce(
@@ -47,7 +64,7 @@ function DataTable({ user }) {
             0
         );
         return (
-            <Card key={loc.id} fluid>
+            <Card key={loc.id} fluid style={style}>
                 <Card.Header>{loc.name}</Card.Header>
                 <Card.Meta>Number of Activities: {activities.length}</Card.Meta>
                 <Card.Meta>
@@ -59,23 +76,30 @@ function DataTable({ user }) {
 
     return (
         <div>
-            <h1>DataTable</h1>
+            <h1>Activity Summary</h1>
+            <Dropdown
+                selection
+                search
+                options={weekOptions}
+                value={weeksAgo}
+                onChange={(e, { value }) => setWeeksAgo(value)}
+            />
             <Segment.Group horizontal>
                 <Segment>
                     <h4>Activities</h4>
                     <List style={{ textAlign: "left" }}>
                         <List.Item>Number of Activities: {number}</List.Item>
-                        <List.Item>
+                        <List.Item style={style}>
                             Total Active Minutes: {totalDuration}
                         </List.Item>
-                        <List.Item>
+                        <List.Item style={style}>
                             Average Duration: {roundTwo(totalDuration / number)}
                         </List.Item>
-                        <List.Item>
+                        <List.Item style={style}>
                             Average Intensity:{" "}
                             {roundTwo(totalIntensity / number)}
                         </List.Item>
-                        <List.Item>
+                        <List.Item style={style}>
                             Average Rating: {roundTwo(totalRating / number)}
                         </List.Item>
                     </List>
