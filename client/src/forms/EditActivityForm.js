@@ -168,17 +168,10 @@ function EditActivityForm() {
                         label="Instructor: "
                         options={instructorOptions}
                         value={activityInfo.instructor_id}
-                        onChange={(e) => {
+                        onChange={(e, { value }) => {
                             setActivityInfo({
                                 ...activityInfo,
-                                instructor_id: instructorOptions.filter(
-                                    (inst) => {
-                                        return (
-                                            inst.text ===
-                                            e.target.firstChild.textContent
-                                        );
-                                    }
-                                )[0].value,
+                                instructor_id: value,
                             });
                         }}
                     />
@@ -186,15 +179,10 @@ function EditActivityForm() {
                         label="Locations: "
                         options={locationOptions}
                         value={activityInfo.location_id}
-                        onChange={(e) => {
+                        onChange={(e, { value }) => {
                             setActivityInfo({
                                 ...activityInfo,
-                                location_id: locationOptions.filter((loc) => {
-                                    return (
-                                        loc.text ===
-                                        e.target.firstChild.textContent
-                                    );
-                                })[0].value,
+                                location_id: value,
                             });
                         }}
                     />

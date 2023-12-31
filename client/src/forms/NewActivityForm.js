@@ -145,17 +145,10 @@ function NewActivityForm() {
                         label="Instructor: "
                         options={instructorOptions}
                         value={newActivityInfo.instructor_id}
-                        onChange={(e) => {
+                        onChange={(e, { value }) => {
                             setNewActivityInfo({
                                 ...newActivityInfo,
-                                instructor_id: instructorOptions.filter(
-                                    (inst) => {
-                                        return (
-                                            inst.text ===
-                                            e.target.firstChild.textContent
-                                        );
-                                    }
-                                )[0].value,
+                                instructor_id: value,
                             });
                         }}
                     />
@@ -163,15 +156,10 @@ function NewActivityForm() {
                         label="Locations: "
                         options={locationOptions}
                         value={newActivityInfo.location_id}
-                        onChange={(e) => {
+                        onChange={(e, { value }) => {
                             setNewActivityInfo({
                                 ...newActivityInfo,
-                                location_id: locationOptions.filter((loc) => {
-                                    return (
-                                        loc.text ===
-                                        e.target.firstChild.textContent
-                                    );
-                                })[0].value,
+                                location_id: value,
                             });
                         }}
                     />
