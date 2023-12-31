@@ -21,6 +21,6 @@ class Activity < ApplicationRecord
 
   def does_not_overlap
     activities = User.find_by(id: user_id).activities
-    activities.each {|act| errors.add(:overlap!, "Activities must not overlap.") unless (start_time + (duration * 60)) < act.start_time || start_time > (act.start_time + (act.duration * 60))}
+    activities.each {|act| errors.add(:overlap!, "Activities must not overlap.") unless act.id == id || (start_time + (duration * 60)) < act.start_time || start_time > (act.start_time + (act.duration * 60))}
   end
 end

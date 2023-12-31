@@ -1,17 +1,20 @@
 import { useState } from "react";
 import { List, Segment, Card, Dropdown } from "semantic-ui-react";
 import weekOptions from "../weeks";
+import { getDate } from "../datetime";
 
 function DataTable({ user }) {
     const [weeksAgo, setWeeksAgo] = useState(-1);
-
-    console.log(weeksAgo);
+    const week = 7 * 24 * 60 * 60 * 1000;
 
     const activeActivities = user.activities.filter((act) => {
         if (weeksAgo === -1) {
             return true;
         } else {
-            //return true if start date is in week
+            return (
+                getDate(act.start_time) <= new Date() - weeksAgo * week &&
+                getDate(act.start_time) > new Date() - (weeksAgo + 1) * week
+            );
         }
     });
 
@@ -36,43 +39,59 @@ function DataTable({ user }) {
         return Math.round(num * 100) / 100;
     }
 
-    const instructorCards = user.unique_instructors.map((inst) => {
-        const activities = activeActivities.filter((act) => {
-            return inst.id === act.instructor.id;
+    const instructorCards = user.unique_instructors
+        .filter((inst) => {
+            return activeActivities.some(
+                (act) => act.instructor.id === inst.id
+            );
+        })
+        .map((inst) => {
+            const activities = activeActivities.filter((act) => {
+                return inst.id === act.instructor.id;
+            });
+            const instRating = activities.reduce(
+                (n, { user_rating }) => n + user_rating,
+                0
+            );
+            return (
+                <Card key={inst.id} fluid>
+                    <Card.Header>{inst.name}</Card.Header>
+                    <Card.Meta>
+                        Number of Activities: {activities.length}
+                    </Card.Meta>
+                    <Card.Meta>
+                        Average Rating:{" "}
+                        {roundTwo(instRating / activities.length)}
+                    </Card.Meta>
+                </Card>
+            );
         });
-        const instRating = activities.reduce(
-            (n, { user_rating }) => n + user_rating,
-            0
-        );
-        return (
-            <Card key={inst.id} fluid style={style}>
-                <Card.Header>{inst.name}</Card.Header>
-                <Card.Meta>Number of Activities: {activities.length}</Card.Meta>
-                <Card.Meta>
-                    Average Rating: {roundTwo(instRating / activities.length)}
-                </Card.Meta>
-            </Card>
-        );
-    });
 
-    const locationCards = user.unique_locations.map((loc) => {
-        const activities = activeActivities.filter((act) => {
-            return loc.id === act.location.id;
+    const locationCards = user.unique_locations
+        .filter((loc) => {
+            return activeActivities.some((act) => act.location.id === loc.id);
+        })
+        .map((loc) => {
+            const activities = activeActivities.filter((act) => {
+                return loc.id === act.location.id;
+            });
+            const locRating = activities.reduce(
+                (n, { user_rating }) => n + user_rating,
+                0
+            );
+            return (
+                <Card key={loc.id} fluid>
+                    <Card.Header>{loc.name}</Card.Header>
+                    <Card.Meta>
+                        Number of Activities: {activities.length}
+                    </Card.Meta>
+                    <Card.Meta>
+                        Average Rating:{" "}
+                        {roundTwo(locRating / activities.length)}
+                    </Card.Meta>
+                </Card>
+            );
         });
-        const locRating = activities.reduce(
-            (n, { user_rating }) => n + user_rating,
-            0
-        );
-        return (
-            <Card key={loc.id} fluid style={style}>
-                <Card.Header>{loc.name}</Card.Header>
-                <Card.Meta>Number of Activities: {activities.length}</Card.Meta>
-                <Card.Meta>
-                    Average Rating: {roundTwo(locRating / activities.length)}
-                </Card.Meta>
-            </Card>
-        );
-    });
 
     return (
         <div>
