@@ -3,6 +3,7 @@ import { UserContext } from "../contexts/UserContext";
 import { Button, Segment } from "semantic-ui-react";
 import Profile from "./Profile";
 import DataTable from "./DataTable";
+import DataCharts from "./DataCharts";
 
 function UserPage() {
     const { user, setUser } = useContext(UserContext);
@@ -42,6 +43,9 @@ function UserPage() {
                         <DataTable user={user} />
                     </Segment>
                 </Segment.Group>
+                <Segment>
+                    <DataCharts />
+                </Segment>
             </div>
         );
     }

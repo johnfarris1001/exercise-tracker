@@ -66,6 +66,9 @@ function DataTable({ user }) {
                     <List style={{ textAlign: "left" }}>
                         <List.Item>Number of Activities: {number}</List.Item>
                         <List.Item>
+                            Total Active Minutes: {totalDuration}
+                        </List.Item>
+                        <List.Item>
                             Average Duration: {roundTwo(totalDuration / number)}
                         </List.Item>
                         <List.Item>
