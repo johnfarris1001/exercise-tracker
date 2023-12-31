@@ -79,7 +79,6 @@ function NewActivityForm() {
 
     return (
         <div>
-            <Divider />
             <Form style={style} onSubmit={handleNewActivity}>
                 <h3 style={{ textAlign: "center" }}>New Activity</h3>
                 <Form.Group widths="equal">
@@ -215,6 +214,7 @@ function NewActivityForm() {
                     )}
                 </div>
             </Form>
+            <Divider />
         </div>
     );
 }

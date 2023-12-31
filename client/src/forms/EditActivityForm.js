@@ -98,7 +98,6 @@ function EditActivityForm() {
 
     return (
         <div>
-            <Divider />
             <Form style={style} onSubmit={handleEditActivity}>
                 <h3 style={{ textAlign: "center" }}>Update Activity</h3>
                 <Form.Group widths="equal">
@@ -234,6 +233,7 @@ function EditActivityForm() {
                     )}
                 </div>
             </Form>
+            <Divider />
         </div>
     );
 }

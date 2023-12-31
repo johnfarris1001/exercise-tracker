@@ -1,5 +1,5 @@
 import { NavLink, Outlet, useOutletContext } from "react-router-dom";
-import { Table } from "semantic-ui-react";
+import { Table, Divider } from "semantic-ui-react";
 import Activity from "./Activity";
 
 function Activities() {
@@ -87,10 +87,25 @@ function Activities() {
 
         return (
             <div>
+                <h2>{user.username}'s Activities</h2>
+                <NavLink className="ui button" to="/activities/new">
+                    Add New Activity
+                </NavLink>
+                <Divider />
+                <Outlet
+                    context={{
+                        addActivity: addActivity,
+                        activities: user.activities,
+                        editActivity: editActivity,
+                    }}
+                />
                 <Table
                     celled
                     structured
-                    style={{ width: "80%", margin: "auto" }}
+                    style={{
+                        width: "80%",
+                        margin: "auto",
+                    }}
                 >
                     <Table.Header>
                         <Table.Row>
@@ -114,9 +129,6 @@ function Activities() {
                     }}
                 />
                 <br />
-                <NavLink className="ui button" to="/activities/new">
-                    Add New Activity
-                </NavLink>
             </div>
         );
     } else {
