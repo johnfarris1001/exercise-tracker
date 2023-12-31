@@ -3,7 +3,7 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { InstructorsContext } from "../contexts/InstructorsContext";
 import { LocationsContext } from "../contexts/LocationsContext";
 import { Divider, Form, Button } from "semantic-ui-react";
-import { getNowDate, createDatetime, getDate } from "../datetime";
+import { getNowDate, createDatetime, getDate, formatTime } from "../datetime";
 
 function EditActivityForm() {
     const { instructors } = useContext(InstructorsContext);
@@ -34,16 +34,12 @@ function EditActivityForm() {
                 location_id: activity.location.id,
                 intensity: activity.intensity,
                 user_rating: activity.user_rating,
-                date: `${date.getFullYear()}-${date.getMonth() + 1}-${
-                    date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-                }`,
-                time: `${date.getHours()}:${
-                    date.getMinutes() === 0
-                        ? "00"
-                        : date.getMinutes() < 10
-                        ? `0${date.getMinutes()}`
-                        : date.getMinutes()
-                }`,
+                date: `${date.getFullYear()}-${formatTime(
+                    date.getMonth() + 1
+                )}-${formatTime(date.getDate())}`,
+                time: `${formatTime(date.getHours())}:${formatTime(
+                    date.getMinutes()
+                )}`,
             });
         }
     }, [activity]);

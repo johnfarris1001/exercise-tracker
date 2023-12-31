@@ -1,14 +1,71 @@
 import { useState } from "react";
 import { Dropdown } from "semantic-ui-react";
 import weekOptions from "../weeks";
+import { getDate } from "../datetime";
 import CanvasJSReact from "@canvasjs/react-charts";
-//var CanvasJSReact = require('@canvasjs/react-charts');
 
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-function DataCharts() {
-    const [weeksAgo, setWeeksAgo] = useState(-1);
+weekOptions.shift();
+
+function DataCharts({ user }) {
+    const [weeksAgo, setWeeksAgo] = useState(0);
+    const week = 7 * 24 * 60 * 60 * 1000;
+    const day = week / 7;
+    const headDate = new Date() - weeksAgo * week;
+    const days = [
+        new Date(headDate),
+        headDate - day,
+        headDate - day * 2,
+        headDate - day * 3,
+        headDate - day * 4,
+        headDate - day * 5,
+        headDate - day * 6,
+    ];
+
+    const activeActivities = user.activities.filter((act) => {
+        if (weeksAgo === -1) {
+            return true;
+        } else {
+            return (
+                getDate(act.start_time) <= new Date() - weeksAgo * week &&
+                getDate(act.start_time) > new Date() - (weeksAgo + 1) * week
+            );
+        }
+    });
+
+    const activeTypes = activeActivities
+        .map((act, index) => {
+            return { key: index, text: act.category, value: act.category };
+        })
+        .filter((act, index, arr) => {
+            return (
+                arr.map((obj) => obj["value"]).indexOf(act["value"]) === index
+            );
+        });
+
+    const data = activeTypes.map((item) => {
+        return {
+            type: "stackedColumn",
+            showInLegend: true,
+            name: item.value,
+            dataPoints: days.map((elem) => {
+                return {
+                    y: activeActivities
+                        .filter((act) => {
+                            return (
+                                act.category === item.value &&
+                                getDate(act.start_time) <= elem &&
+                                getDate(act.start_time) > elem - day
+                            );
+                        })
+                        .reduce((n, { duration }) => n + duration, 0),
+                    x: elem,
+                };
+            }),
+        };
+    });
 
     function toolTipContent(e) {
         var str = "";
@@ -46,76 +103,18 @@ function DataCharts() {
             fontColor: "#695A42",
         },
         axisX: {
-            interval: 1,
-            intervalType: "year",
+            valueFormatString: "DDD",
         },
         axisY: {
-            valueFormatString: "$#0bn",
+            suffix: "min",
             gridColor: "#B6B1A8",
             tickColor: "#B6B1A8",
         },
-        toolTip: {
-            shared: true,
-            content: toolTipContent,
-        },
-        data: [
-            {
-                type: "stackedColumn",
-                showInLegend: true,
-                name: "Q1",
-                dataPoints: [
-                    { y: 6.75, x: new Date(2010, 0) },
-                    { y: 8.57, x: new Date(2011, 0) },
-                    { y: 10.64, x: new Date(2012, 0) },
-                    { y: 13.97, x: new Date(2013, 0) },
-                    { y: 15.42, x: new Date(2014, 0) },
-                    { y: 17.26, x: new Date(2015, 0) },
-                    { y: 20.26, x: new Date(2016, 0) },
-                ],
-            },
-            {
-                type: "stackedColumn",
-                showInLegend: true,
-                name: "Q2",
-                dataPoints: [
-                    { y: 6.82, x: new Date(2010, 0) },
-                    { y: 9.02, x: new Date(2011, 0) },
-                    { y: 11.8, x: new Date(2012, 0) },
-                    { y: 14.11, x: new Date(2013, 0) },
-                    { y: 15.96, x: new Date(2014, 0) },
-                    { y: 17.73, x: new Date(2015, 0) },
-                    { y: 21.5, x: new Date(2016, 0) },
-                ],
-            },
-            {
-                type: "stackedColumn",
-                showInLegend: true,
-                name: "Q3",
-                dataPoints: [
-                    { y: 7.28, x: new Date(2010, 0) },
-                    { y: 9.72, x: new Date(2011, 0) },
-                    { y: 13.3, x: new Date(2012, 0) },
-                    { y: 14.9, x: new Date(2013, 0) },
-                    { y: 18.1, x: new Date(2014, 0) },
-                    { y: 18.68, x: new Date(2015, 0) },
-                    { y: 22.45, x: new Date(2016, 0) },
-                ],
-            },
-            {
-                type: "stackedColumn",
-                showInLegend: true,
-                name: "Q4",
-                dataPoints: [
-                    { y: 8.44, x: new Date(2010, 0) },
-                    { y: 10.58, x: new Date(2011, 0) },
-                    { y: 14.41, x: new Date(2012, 0) },
-                    { y: 16.86, x: new Date(2013, 0) },
-                    { y: 10.64, x: new Date(2014, 0) },
-                    { y: 21.32, x: new Date(2015, 0) },
-                    { y: 26.06, x: new Date(2016, 0) },
-                ],
-            },
-        ],
+        // toolTip: {
+        //     shared: true,
+        //     content: toolTipContent,
+        // },
+        data: data,
     };
 
     return (

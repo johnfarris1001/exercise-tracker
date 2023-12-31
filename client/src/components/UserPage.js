@@ -44,7 +44,7 @@ function UserPage() {
                     </Segment>
                 </Segment.Group>
                 <Segment>
-                    <DataCharts />
+                    <DataCharts user={user} />
                 </Segment>
             </div>
         );

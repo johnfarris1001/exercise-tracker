@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Button } from "semantic-ui-react";
-import { getDate } from "../datetime";
+import { getDate, formatTime } from "../datetime";
 
 function Activity({ activity, deleteActivity }) {
     const [confirmDelete, setConfirmDelete] = useState(false);
@@ -20,10 +20,6 @@ function Activity({ activity, deleteActivity }) {
                 navigate("/activities");
             });
         }
-    }
-
-    function formatTime(time) {
-        return time === 0 ? "00" : time < 10 ? `0${time}` : time;
     }
 
     return (

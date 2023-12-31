@@ -16,3 +16,7 @@ export function createDatetime(date, time) {
     const utc = new Date(now.getTime() + offset * 60 * 1000);
     return utc.toISOString();
 }
+
+export function formatTime(time) {
+    return time === 0 ? "00" : time < 10 ? `0${time}` : time;
+}
