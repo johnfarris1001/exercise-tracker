@@ -22,15 +22,16 @@ function Activity({ activity, deleteActivity }) {
         }
     }
 
+    function formatTime(time) {
+        return time === 0 ? "00" : time < 10 ? `0${time}` : time;
+    }
+
     return (
         <Table.Row>
-            <Table.Cell>{`${date.getHours()}:${
-                date.getMinutes() === 0
-                    ? "00"
-                    : date.getMinutes() < 10
-                    ? `0${date.getMinutes()}`
-                    : date.getMinutes()
-            } ${
+            <Table.Cell>{`${formatTime(date.getHours())}:${formatTime(
+                date.getMinutes()
+            )}
+            ${
                 date.getMonth() + 1
             }/${date.getDate()}/${date.getFullYear()}`}</Table.Cell>
             <Table.Cell>{activity.category}</Table.Cell>
