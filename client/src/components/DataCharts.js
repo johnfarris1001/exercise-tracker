@@ -7,6 +7,11 @@ import CanvasJSReact from "@canvasjs/react-charts";
 var CanvasJS = CanvasJSReact.CanvasJS;
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 const chartWeeks = [...weekOptions].splice(1);
+chartWeeks.unshift({
+    key: -1,
+    text: "Previous Ten Weeks",
+    value: -1,
+});
 
 function DataCharts({ user }) {
     const [weeksAgo, setWeeksAgo] = useState(0);
