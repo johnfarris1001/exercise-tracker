@@ -34,7 +34,7 @@ end
 
 user_1 = User.find_by(username: 'firstSeedUser')
 user_2 = User.find_by(username: 'secondSeedUser')
-categories = ['Outdoor Run/Walk, Treadmill Run/Walk', 'HIIT', 'Free Weights', 'Class Based Exercise', 'Circuit Training', 'Yoga', 'Pilates']
+categories = ['Outdoor Run/Walk', 'Treadmill Run/Walk', 'HIIT', 'Free Weights', 'Class Based Exercise', 'Circuit Training', 'Yoga', 'Pilates']
 durations = (2..11).to_a.map {|n| n*5}
 dates = ((Date.today - 70)..(Date.today))
 days = []

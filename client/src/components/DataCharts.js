@@ -76,21 +76,21 @@ function DataCharts({ user }) {
                 e.entries[i].dataSeries.color +
                 '"> ' +
                 e.entries[i].dataSeries.name +
-                "</span>: $<strong>" +
+                "</span>: <strong>" +
                 e.entries[i].dataPoint.y +
-                "</strong>bn<br/>";
+                "</strong>min<br/>";
             total = e.entries[i].dataPoint.y + total;
             str = str.concat(str1);
         }
         str2 =
             '<span style = "color:DodgerBlue;"><strong>' +
-            e.entries[0].dataPoint.x.getFullYear() +
+            getDate(e.entries[0].dataPoint.x).toISOString().slice(0, 10) +
             "</strong></span><br/>";
         total = Math.round(total * 100) / 100;
         str3 =
-            '<span style = "color:Tomato">Total:</span><strong> $' +
+            '<span style = "color:Tomato">Total:</span><strong> ' +
             total +
-            "</strong>bn<br/>";
+            "</strong>min<br/>";
         return str2.concat(str).concat(str3);
     }
 
@@ -109,10 +109,10 @@ function DataCharts({ user }) {
             gridColor: "#B6B1A8",
             tickColor: "#B6B1A8",
         },
-        // toolTip: {
-        //     shared: true,
-        //     content: toolTipContent,
-        // },
+        toolTip: {
+            shared: true,
+            content: toolTipContent,
+        },
         data: data,
     };
 
