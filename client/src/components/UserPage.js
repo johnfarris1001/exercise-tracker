@@ -30,7 +30,10 @@ function UserPage() {
                 <Button onClick={handleProfileDisplay}>
                     {showProfile ? "Hide Profile" : "Show Profile"}
                 </Button>
-                <Segment.Group horizontal>
+                <Segment.Group
+                    horizontal
+                    style={{ backgroundColor: "#fffff4" }}
+                >
                     <Segment
                         style={
                             showProfile

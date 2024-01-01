@@ -8,7 +8,7 @@ function NavBar({ handleClick }) {
 
     if (user) {
         return (
-            <Menu className="navbar">
+            <Menu className="navbar" style={{ backgroundColor: "#f9f9f9" }}>
                 <Menu.Item>
                     <NavLink to="/">Home</NavLink>
                 </Menu.Item>

@@ -44,12 +44,12 @@ dates.each do |d|
         days << DateTime.new(d.year, d.month, d.day, h)
     end
 end
-start_dates_1 = days.sample(100)
-(0..99).each do |i|
+start_dates_1 = days.sample(200)
+(0..199).each do |i|
     Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_1[i], duration: durations.sample, user_rating: rand(1..5), user: user_1, instructor: Instructor.all.sample, location: Location.all.sample)
 end
 
-start_dates_2 = days.sample(100)
-(0..99).each do |i|
+start_dates_2 = days.sample(200)
+(0..199).each do |i|
     Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_2[i], duration: durations.sample, user_rating: rand(1..5), user: user_2, instructor: Instructor.all.sample, location: Location.all.sample)
 end
