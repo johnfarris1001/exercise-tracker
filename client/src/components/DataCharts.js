@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Segment } from "semantic-ui-react";
 import weekOptions from "../weeks";
 import colors from "../colors";
 import { getDate } from "../datetime";
@@ -17,6 +17,8 @@ chartWeeks.unshift({
 function DataCharts({ user }) {
     const [weeksAgo, setWeeksAgo] = useState(-1);
     const [category, setCategory] = useState("All");
+    const [locWeeksAgo, setLocWeeksAgo] = useState(-1);
+    const [chartType, setChartType] = useState(0);
     const week = 7 * 24 * 60 * 60 * 1000;
     const day = week / 7;
     const headDate = new Date() - weeksAgo * week;
@@ -40,6 +42,13 @@ function DataCharts({ user }) {
         new Date() - week * 7,
         new Date() - week * 8,
         new Date() - week * 9,
+    ];
+
+    const chartTypes = [
+        { key: 0, text: "Minutes", value: 0 },
+        { key: 1, text: "Intensity", value: 1 },
+        { key: 2, text: "Rating", value: 2 },
+        { key: 3, text: "Quality", value: 3 },
     ];
 
     const activeActivities = user.activities.filter((act) => {
@@ -153,7 +162,7 @@ function DataCharts({ user }) {
         return str2.concat(str).concat(str3);
     }
 
-    const options = {
+    const minutesOptions = {
         animationEnabled: true,
         title: {
             text: "Active Minutes by Category",
@@ -175,38 +184,87 @@ function DataCharts({ user }) {
         data: weeksAgo === -1 ? weeksData : daysData,
     };
 
+    const locationData = [];
+
+    const locationOptions = {
+        animationEnabled: true,
+        theme: "light2",
+        title: {
+            text: "Location Results",
+        },
+        data: [
+            {
+                type: "line",
+                indexLabelFontSize: 16,
+                dataPoints: locationData,
+            },
+        ],
+    };
+
     return (
         <div>
             <h1>Data Charts</h1>
-            <div>
-                <span style={{ padding: "10px" }}>
-                    {"Time Range:  "}
-                    <Dropdown
-                        selection
-                        inline
-                        options={chartWeeks}
-                        value={weeksAgo}
-                        onChange={(e, { value }) => {
-                            setWeeksAgo(value);
-                            setCategory("All");
-                        }}
-                    />
-                </span>
-                <span style={{ padding: "10px" }}>
-                    {"Activity:  "}
-                    <Dropdown
-                        selection
-                        inline
-                        options={[
-                            { key: -1, text: "All", value: "All" },
-                            ...activeTypes,
-                        ]}
-                        value={category}
-                        onChange={(e, { value }) => setCategory(value)}
-                    />
-                </span>
-            </div>
-            <CanvasJSChart options={options} />
+            <Segment.Group>
+                <Segment>
+                    <div>
+                        <span style={{ padding: "10px" }}>
+                            {"Time Range:  "}
+                            <Dropdown
+                                selection
+                                inline
+                                options={chartWeeks}
+                                value={weeksAgo}
+                                onChange={(e, { value }) => {
+                                    setWeeksAgo(value);
+                                    setCategory("All");
+                                }}
+                            />
+                        </span>
+                        <span style={{ padding: "10px" }}>
+                            {"Activity:  "}
+                            <Dropdown
+                                selection
+                                inline
+                                options={[
+                                    { key: -1, text: "All", value: "All" },
+                                    ...activeTypes,
+                                ]}
+                                value={category}
+                                onChange={(e, { value }) => setCategory(value)}
+                            />
+                        </span>
+                    </div>
+                    <CanvasJSChart options={minutesOptions} />
+                </Segment>
+                <Segment>
+                    <div>
+                        <span style={{ padding: "10px" }}>
+                            {"Time Range:  "}
+                            <Dropdown
+                                selection
+                                inline
+                                options={chartWeeks}
+                                value={locWeeksAgo}
+                                onChange={(e, { value }) => {
+                                    setLocWeeksAgo(value);
+                                    setCategory("All");
+                                }}
+                            />
+                        </span>
+                        <span style={{ padding: "10px" }}>
+                            {"Activity:  "}
+                            <Dropdown
+                                selection
+                                inline
+                                options={chartTypes}
+                                value={chartType}
+                                onChange={(e, { value }) => setChartType(value)}
+                            />
+                        </span>
+                    </div>
+                    <CanvasJSChart options={locationOptions} />
+                </Segment>
+            </Segment.Group>
         </div>
     );
 }
