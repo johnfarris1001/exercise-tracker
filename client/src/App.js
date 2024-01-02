@@ -6,15 +6,21 @@ import { InstructorsContext } from "./contexts/InstructorsContext";
 import { LocationsContext } from "./contexts/LocationsContext";
 
 function App() {
-    const { user, setUser } = useContext(UserContext);
+    const { user, setUser, setAuthorizing } = useContext(UserContext);
     const { setInstructors, getInstructors } = useContext(InstructorsContext);
     const { setLocations, getLocations } = useContext(LocationsContext);
     const navigate = useNavigate();
 
     useEffect(() => {
+        setAuthorizing(true);
         fetch("/me").then((resp) => {
             if (resp.ok) {
-                resp.json().then((user) => setUser(user));
+                resp.json().then((user) => {
+                    setUser(user);
+                    setAuthorizing(false);
+                });
+            } else {
+                setAuthorizing(false);
             }
         });
     }, [setUser]);

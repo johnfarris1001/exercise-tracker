@@ -4,9 +4,12 @@ const UserContext = React.createContext();
 
 function UserProvider({ children }) {
     const [user, setUser] = useState(null);
+    const [authorizing, setAuthorizing] = useState(false);
 
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider
+            value={{ user, setUser, authorizing, setAuthorizing }}
+        >
             {children}
         </UserContext.Provider>
     );

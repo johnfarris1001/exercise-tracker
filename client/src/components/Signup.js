@@ -5,11 +5,13 @@ import { Form, Button } from "semantic-ui-react";
 function Signup() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [disabled, setDisabled] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
     const onLogin = useOutletContext();
 
     function handleSubmit(e) {
+        setDisabled(true);
         e.preventDefault();
         fetch("/signup", {
             method: "POST",
@@ -25,7 +27,10 @@ function Signup() {
             if (r.ok) {
                 r.json().then((user) => onLogin(user));
             } else {
-                r.json().then((data) => setErrorMessages(data.errors));
+                r.json().then((data) => {
+                    setDisabled(false);
+                    setErrorMessages(data.errors);
+                });
             }
         });
     }
@@ -73,7 +78,9 @@ function Signup() {
                         }
                     />
                 </Form.Field>
-                <Button type="submit">Submit</Button>
+                <Button className={disabled ? "disabled" : ""} type="submit">
+                    Submit
+                </Button>
                 <div style={{ color: "red" }}>
                     {errorMessages.length > 0 && (
                         <div>

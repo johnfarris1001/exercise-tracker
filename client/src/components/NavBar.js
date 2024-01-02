@@ -4,7 +4,7 @@ import { Menu, Button } from "semantic-ui-react";
 import { UserContext } from "../contexts/UserContext";
 
 function NavBar({ handleClick }) {
-    const { user } = useContext(UserContext);
+    const { user, authorizing } = useContext(UserContext);
 
     if (user) {
         return (
@@ -31,6 +31,14 @@ function NavBar({ handleClick }) {
                         </Button>
                     </Menu.Item>
                 </Menu.Menu>
+            </Menu>
+        );
+    } else if (authorizing) {
+        return (
+            <Menu className="navbar">
+                <Menu.Item>
+                    <NavLink to="/">Home</NavLink>
+                </Menu.Item>
             </Menu>
         );
     } else {
