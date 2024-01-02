@@ -5,10 +5,12 @@ import { Form, Button } from "semantic-ui-react";
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [disabled, setDisabled] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const { onLogin } = useOutletContext();
 
     function handleSubmit(e) {
+        setDisabled(true);
         e.preventDefault();
         fetch("/login", {
             method: "POST",
@@ -23,7 +25,10 @@ function Login() {
             if (r.ok) {
                 r.json().then((user) => onLogin(user));
             } else {
-                r.json().then((data) => setErrorMessages(data.errors));
+                r.json().then((data) => {
+                    setDisabled(false);
+                    setErrorMessages(data.errors);
+                });
             }
         });
     }
@@ -56,7 +61,9 @@ function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </Form.Field>
-                <Button type="submit">Login</Button>
+                <Button className={disabled ? "disabled" : ""} type="submit">
+                    Login
+                </Button>
                 <div style={{ color: "red" }}>
                     {errorMessages.length > 0 && (
                         <div>

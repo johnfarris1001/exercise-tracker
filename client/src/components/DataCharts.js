@@ -63,9 +63,6 @@ function DataCharts({ user }) {
             );
         });
 
-    console.log(activeTypes);
-    console.log(category);
-
     const daysData = activeTypes
         .filter((act) => {
             if (category === "All") {
