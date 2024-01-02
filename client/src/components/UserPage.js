@@ -32,7 +32,7 @@ function UserPage() {
                 </Button>
                 <Segment.Group
                     horizontal
-                    style={{ backgroundColor: "#fffff4" }}
+                    style={{ backgroundColor: "#f9f1f1" }}
                 >
                     <Segment
                         style={
