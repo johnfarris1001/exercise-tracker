@@ -7,49 +7,51 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-require 'date'
-# Users
 
-User.create(username: 'firstSeedUser', password_digest: BCrypt::Password.create('password'))
-User.create(username: 'secondSeedUser', password_digest: BCrypt::Password.create('password'))
 
-# Profile 
+# require 'date'
+# # Users
 
-user = User.find_by(username: 'firstSeedUser')
-Profile.create(name: Faker::Name.name, bio: Faker::Quote.famous_last_words, height: 70, weight: 200, user: user, image: Faker::LoremFlickr.image(size: "50x60", search_terms: ['sports', 'fitness']))
+# User.create(username: 'firstSeedUser', password_digest: BCrypt::Password.create('password'))
+# User.create(username: 'secondSeedUser', password_digest: BCrypt::Password.create('password'))
 
-# Instructors
+# # Profile 
 
-5.times do
-    Instructor.create(name: Faker::Name.name, years: rand(0..20))
-end
+# user = User.find_by(username: 'firstSeedUser')
+# Profile.create(name: Faker::Name.name, bio: Faker::Quote.famous_last_words, height: 70, weight: 200, user: user, image: Faker::LoremFlickr.image(size: "50x60", search_terms: ['sports', 'fitness']))
 
-# Locations
+# # Instructors
 
-10.times do
-    Location.create(name: Faker::Company.name, address: Faker::Address.street_address, description: Faker::Marketing.buzzwords)
-end
+# 5.times do
+#     Instructor.create(name: Faker::Name.name, years: rand(0..20))
+# end
 
-# Activities
+# # Locations
 
-user_1 = User.find_by(username: 'firstSeedUser')
-user_2 = User.find_by(username: 'secondSeedUser')
-categories = ['Outdoor Run/Walk', 'Treadmill Run/Walk', 'HIIT', 'Free Weights', 'Class Based Exercise', 'Circuit Training', 'Yoga', 'Pilates']
-durations = (2..11).to_a.map {|n| n*5}
-dates = ((Date.today - 70)..(Date.today))
-days = []
-hours = (8..18).to_a
-dates.each do |d|
-    hours.each do |h|
-        days << DateTime.new(d.year, d.month, d.day, h)
-    end
-end
-start_dates_1 = days.sample(200)
-(0..199).each do |i|
-    Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_1[i], duration: durations.sample, user_rating: rand(1..5), user: user_1, instructor: Instructor.all.sample, location: Location.all.sample)
-end
+# 10.times do
+#     Location.create(name: Faker::Company.name, address: Faker::Address.street_address, description: Faker::Marketing.buzzwords)
+# end
 
-start_dates_2 = days.sample(200)
-(0..199).each do |i|
-    Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_2[i], duration: durations.sample, user_rating: rand(1..5), user: user_2, instructor: Instructor.all.sample, location: Location.all.sample)
-end
+# # Activities
+
+# user_1 = User.find_by(username: 'firstSeedUser')
+# user_2 = User.find_by(username: 'secondSeedUser')
+# categories = ['Outdoor Run/Walk', 'Treadmill Run/Walk', 'HIIT', 'Free Weights', 'Class Based Exercise', 'Circuit Training', 'Yoga', 'Pilates']
+# durations = (2..11).to_a.map {|n| n*5}
+# dates = ((Date.today - 70)..(Date.today))
+# days = []
+# hours = (8..18).to_a
+# dates.each do |d|
+#     hours.each do |h|
+#         days << DateTime.new(d.year, d.month, d.day, h)
+#     end
+# end
+# start_dates_1 = days.sample(200)
+# (0..199).each do |i|
+#     Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_1[i], duration: durations.sample, user_rating: rand(1..5), user: user_1, instructor: Instructor.all.sample, location: Location.all.sample)
+# end
+
+# start_dates_2 = days.sample(200)
+# (0..199).each do |i|
+#     Activity.create(category: categories.sample, intensity: rand(1..10), start_time: start_dates_2[i], duration: durations.sample, user_rating: rand(1..5), user: user_2, instructor: Instructor.all.sample, location: Location.all.sample)
+# end
