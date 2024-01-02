@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Dropdown } from "semantic-ui-react";
 import weekOptions from "../weeks";
+import colors from "../colors";
 import { getDate } from "../datetime";
 import CanvasJSReact from "@canvasjs/react-charts";
 
@@ -14,7 +15,8 @@ chartWeeks.unshift({
 });
 
 function DataCharts({ user }) {
-    const [weeksAgo, setWeeksAgo] = useState(0);
+    const [weeksAgo, setWeeksAgo] = useState(-1);
+    const [category, setCategory] = useState(-1);
     const week = 7 * 24 * 60 * 60 * 1000;
     const day = week / 7;
     const headDate = new Date() - weeksAgo * week;
@@ -26,6 +28,18 @@ function DataCharts({ user }) {
         headDate - day * 4,
         headDate - day * 5,
         headDate - day * 6,
+    ];
+    const weeks = [
+        new Date(),
+        new Date() - week,
+        new Date() - week * 2,
+        new Date() - week * 3,
+        new Date() - week * 4,
+        new Date() - week * 5,
+        new Date() - week * 6,
+        new Date() - week * 7,
+        new Date() - week * 8,
+        new Date() - week * 9,
     ];
 
     const activeActivities = user.activities.filter((act) => {
@@ -49,11 +63,14 @@ function DataCharts({ user }) {
             );
         });
 
-    const data = activeTypes.map((item) => {
+    console.log(activeTypes);
+
+    const daysData = activeTypes.map((item, index) => {
         return {
             type: "stackedColumn",
             showInLegend: true,
             name: item.value,
+            color: colors[index],
             dataPoints: days.map((elem) => {
                 return {
                     y: activeActivities
@@ -62,6 +79,29 @@ function DataCharts({ user }) {
                                 act.category === item.value &&
                                 getDate(act.start_time) <= elem &&
                                 getDate(act.start_time) > elem - day
+                            );
+                        })
+                        .reduce((n, { duration }) => n + duration, 0),
+                    x: elem,
+                };
+            }),
+        };
+    });
+
+    const weeksData = activeTypes.map((item, index) => {
+        return {
+            type: "stackedColumn",
+            showInLegend: true,
+            name: item.value,
+            color: colors[index],
+            dataPoints: weeks.map((elem) => {
+                return {
+                    y: activeActivities
+                        .filter((act) => {
+                            return (
+                                act.category === item.value &&
+                                getDate(act.start_time) <= elem &&
+                                getDate(act.start_time) > elem - week
                             );
                         })
                         .reduce((n, { duration }) => n + duration, 0),
@@ -107,7 +147,7 @@ function DataCharts({ user }) {
             fontColor: "#695A42",
         },
         axisX: {
-            valueFormatString: "DDD",
+            valueFormatString: "M/D/Y",
         },
         axisY: {
             suffix: "min",
@@ -118,19 +158,37 @@ function DataCharts({ user }) {
             shared: true,
             content: toolTipContent,
         },
-        data: data,
+        data: weeksAgo === -1 ? weeksData : daysData,
     };
 
     return (
         <div>
             <h1>Data Charts</h1>
-            <Dropdown
-                selection
-                search
-                options={chartWeeks}
-                value={weeksAgo}
-                onChange={(e, { value }) => setWeeksAgo(value)}
-            />
+            <div>
+                <span style={{ padding: "10px" }}>
+                    {"Time Range:  "}
+                    <Dropdown
+                        selection
+                        inline
+                        options={chartWeeks}
+                        value={weeksAgo}
+                        onChange={(e, { value }) => setWeeksAgo(value)}
+                    />
+                </span>
+                <span style={{ padding: "10px" }}>
+                    {"Activity:  "}
+                    <Dropdown
+                        selection
+                        inline
+                        options={[
+                            { key: -1, text: "All", value: -1 },
+                            ...activeTypes,
+                        ]}
+                        value={category}
+                        onChange={(e, { value }) => setCategory(value)}
+                    />
+                </span>
+            </div>
             <CanvasJSChart options={options} />
         </div>
     );
