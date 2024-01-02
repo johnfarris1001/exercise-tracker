@@ -16,7 +16,7 @@ chartWeeks.unshift({
 
 function DataCharts({ user }) {
     const [weeksAgo, setWeeksAgo] = useState(-1);
-    const [category, setCategory] = useState(-1);
+    const [category, setCategory] = useState("All");
     const week = 7 * 24 * 60 * 60 * 1000;
     const day = week / 7;
     const headDate = new Date() - weeksAgo * week;
@@ -64,52 +64,69 @@ function DataCharts({ user }) {
         });
 
     console.log(activeTypes);
+    console.log(category);
 
-    const daysData = activeTypes.map((item, index) => {
-        return {
-            type: "stackedColumn",
-            showInLegend: true,
-            name: item.value,
-            color: colors[index],
-            dataPoints: days.map((elem) => {
-                return {
-                    y: activeActivities
-                        .filter((act) => {
-                            return (
-                                act.category === item.value &&
-                                getDate(act.start_time) <= elem &&
-                                getDate(act.start_time) > elem - day
-                            );
-                        })
-                        .reduce((n, { duration }) => n + duration, 0),
-                    x: elem,
-                };
-            }),
-        };
-    });
+    const daysData = activeTypes
+        .filter((act) => {
+            if (category === "All") {
+                return true;
+            } else {
+                return act.value === category;
+            }
+        })
+        .map((item, index) => {
+            return {
+                type: "stackedColumn",
+                showInLegend: true,
+                name: item.value,
+                color: colors[index],
+                dataPoints: days.map((elem) => {
+                    return {
+                        y: activeActivities
+                            .filter((act) => {
+                                return (
+                                    act.category === item.value &&
+                                    getDate(act.start_time) <= elem &&
+                                    getDate(act.start_time) > elem - day
+                                );
+                            })
+                            .reduce((n, { duration }) => n + duration, 0),
+                        x: elem,
+                    };
+                }),
+            };
+        });
 
-    const weeksData = activeTypes.map((item, index) => {
-        return {
-            type: "stackedColumn",
-            showInLegend: true,
-            name: item.value,
-            color: colors[index],
-            dataPoints: weeks.map((elem) => {
-                return {
-                    y: activeActivities
-                        .filter((act) => {
-                            return (
-                                act.category === item.value &&
-                                getDate(act.start_time) <= elem &&
-                                getDate(act.start_time) > elem - week
-                            );
-                        })
-                        .reduce((n, { duration }) => n + duration, 0),
-                    x: elem,
-                };
-            }),
-        };
-    });
+    const weeksData = activeTypes
+        .filter((act) => {
+            if (category === "All") {
+                return true;
+            } else {
+                return act.value === category;
+            }
+        })
+        .map((item, index) => {
+            return {
+                type: "stackedColumn",
+                showInLegend: true,
+                name: item.value,
+                color: colors[index],
+                dataPoints: weeks.map((elem) => {
+                    return {
+                        y: activeActivities
+                            .filter((act) => {
+                                return (
+                                    act.category === item.value &&
+                                    getDate(act.start_time) <= elem &&
+                                    getDate(act.start_time) > elem - week
+                                );
+                            })
+                            .reduce((n, { duration }) => n + duration, 0),
+                        x: elem,
+                    };
+                }),
+            };
+        });
 
     function toolTipContent(e) {
         var str = "";
@@ -172,7 +189,10 @@ function DataCharts({ user }) {
                         inline
                         options={chartWeeks}
                         value={weeksAgo}
-                        onChange={(e, { value }) => setWeeksAgo(value)}
+                        onChange={(e, { value }) => {
+                            setWeeksAgo(value);
+                            setCategory("All");
+                        }}
                     />
                 </span>
                 <span style={{ padding: "10px" }}>
@@ -181,7 +201,7 @@ function DataCharts({ user }) {
                         selection
                         inline
                         options={[
-                            { key: -1, text: "All", value: -1 },
+                            { key: -1, text: "All", value: "All" },
                             ...activeTypes,
                         ]}
                         value={category}
