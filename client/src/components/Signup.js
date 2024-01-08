@@ -8,7 +8,7 @@ function Signup() {
     const [disabled, setDisabled] = useState(false);
     const [errorMessages, setErrorMessages] = useState([]);
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
-    const onLogin = useOutletContext();
+    const { onLogin } = useOutletContext();
 
     function handleSubmit(e) {
         setDisabled(true);
