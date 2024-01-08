@@ -52,8 +52,6 @@ function ColumnChart({ user }) {
             );
         });
 
-    console.log(activeLocations);
-
     const locationData = activeLocations.map((loc) => {
         const locationActivities = activeActivities.filter((act) => {
             return loc.value === act.location.name;
