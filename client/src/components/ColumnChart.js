@@ -83,7 +83,10 @@ function ColumnChart({ user }) {
                     0
                 );
                 return {
-                    label: loc.value,
+                    label:
+                        loc.value.length < 9
+                            ? loc.value
+                            : loc.value.substring(0, 8) + "...",
                     y: total / locationActivities.length,
                 };
             }),
@@ -99,7 +102,10 @@ function ColumnChart({ user }) {
                     0
                 );
                 return {
-                    label: loc.value,
+                    label:
+                        loc.value.length < 9
+                            ? loc.value
+                            : loc.value.substring(0, 8) + "...",
                     y: total / locationActivities.length,
                 };
             }),
