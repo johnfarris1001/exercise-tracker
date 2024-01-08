@@ -52,17 +52,6 @@ function ColumnChart({ user }) {
             );
         });
 
-    const locationData = activeLocations.map((loc) => {
-        const locationActivities = activeActivities.filter((act) => {
-            return loc.value === act.location.name;
-        });
-        const total = locationActivities.reduce(
-            (n, { duration }) => n + duration,
-            0
-        );
-        return { label: loc.value, y: total / locationActivities.length };
-    });
-
     const typeLocationData = [
         {
             type: 0,
@@ -75,7 +64,10 @@ function ColumnChart({ user }) {
                     0
                 );
                 return {
-                    label: loc.value,
+                    label:
+                        loc.value.length < 9
+                            ? loc.value
+                            : loc.value.substring(0, 8) + "...",
                     y: total / locationActivities.length,
                 };
             }),
