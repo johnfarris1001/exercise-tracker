@@ -121,13 +121,6 @@ function Activities() {
                     </Table.Header>
                     <Table.Body>{activitesToDisplay}</Table.Body>
                 </Table>
-                <Outlet
-                    context={{
-                        addActivity: addActivity,
-                        activities: user.activities,
-                        editActivity: editActivity,
-                    }}
-                />
                 <br />
             </div>
         );
