@@ -1,9 +1,14 @@
 import { NavLink, Outlet, useOutletContext } from "react-router-dom";
+import { useContext } from "react";
 import { Table, Divider } from "semantic-ui-react";
 import Activity from "./Activity";
+import { InstructorsContext } from "../contexts/InstructorsContext";
 
 function Activities() {
     const { user, setUser } = useOutletContext();
+    const { instructors, setInstructors } = useContext(InstructorsContext);
+
+    console.log(instructors);
 
     function addActivity(activity) {
         const newUniqueInstructors = user.unique_instructors.filter((inst) => {
@@ -18,7 +23,47 @@ function Activities() {
             unique_instructors: [...newUniqueInstructors, activity.instructor],
             unique_locations: [...newUniqueLocations, activity.location],
         };
+        const instWithUser = instructors.map((inst) => {
+            if (inst.id === activity.instructor.id) {
+                if (
+                    inst.unique_users.some(
+                        (user) => user.id === activity.user.id
+                    )
+                ) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_users: [...inst.unique_users, activity.user],
+                    };
+                }
+            } else {
+                return inst;
+            }
+        });
+        const instWithLoc = instWithUser.map((inst) => {
+            if (inst.id === activity.instructor.id) {
+                if (
+                    inst.unique_locations.some(
+                        (loc) => loc.id === activity.location.id
+                    )
+                ) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_locations: [
+                            ...inst.unique_locations,
+                            activity.location,
+                        ],
+                    };
+                }
+            } else {
+                return inst;
+            }
+        });
         setUser(newUser);
+        setInstructors(instWithLoc);
     }
 
     function deleteActivity(activity) {
@@ -31,12 +76,52 @@ function Activities() {
         const newUniqueLocations = user.unique_locations.filter((loc) => {
             return newActivities.some((act) => act.location.id === loc.id);
         });
+        const instWithUser = instructors.map((inst) => {
+            if (inst.id !== activity.instructor.id) {
+                return inst;
+            } else {
+                if (newUniqueInstructors.find((item) => inst.id === item.id)) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_users: inst.unique_users.filter(
+                            (item) => item.id !== user.id
+                        ),
+                    };
+                }
+            }
+        });
+        const instWithLoc = instWithUser.map((inst) => {
+            if (inst.id !== activity.instructor.id) {
+                return inst;
+            } else {
+                const instructorActivities = inst.activities.filter(
+                    (act) => act.id !== activity.id
+                );
+                if (
+                    instructorActivities.some(
+                        (act) => act.location.id === activity.location.id
+                    )
+                ) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_locations: inst.unique_locations.filter(
+                            (item) => item.id !== activity.location.id
+                        ),
+                    };
+                }
+            }
+        });
         setUser({
             ...user,
             activities: newActivities,
             unique_instructors: newUniqueInstructors,
             unique_locations: newUniqueLocations,
         });
+        setInstructors(instWithLoc);
     }
 
     function editActivity(activity) {

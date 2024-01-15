@@ -1,6 +1,13 @@
 import { useContext } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
-import { Card, Header, Button, Divider } from "semantic-ui-react";
+import {
+    Card,
+    Header,
+    Button,
+    Divider,
+    List,
+    Segment,
+} from "semantic-ui-react";
 import { InstructorsContext } from "../contexts/InstructorsContext";
 
 function Instructors() {
@@ -20,6 +27,50 @@ function Instructors() {
                           <Card.Meta>
                               Years of Experience: {item.years}
                           </Card.Meta>
+                          <Segment.Group horizontal>
+                              <Segment
+                                  style={{
+                                      overflow: "auto",
+                                      maxHeight: "200px",
+                                  }}
+                              >
+                                  <Card.Description
+                                      style={{ textAlign: "left" }}
+                                  >
+                                      <Header>Students:</Header>
+                                      <List>
+                                          {item.unique_users.map((user) => {
+                                              return (
+                                                  <List.Item key={user.id}>
+                                                      {user.username}
+                                                  </List.Item>
+                                              );
+                                          })}
+                                      </List>
+                                  </Card.Description>
+                              </Segment>
+                              <Segment
+                                  style={{
+                                      overflow: "auto",
+                                      maxHeight: "200px",
+                                  }}
+                              >
+                                  <Card.Description
+                                      style={{ textAlign: "right" }}
+                                  >
+                                      <Header>Locations:</Header>
+                                      <List>
+                                          {item.unique_locations.map((loc) => {
+                                              return (
+                                                  <List.Item key={loc.id}>
+                                                      {loc.name}
+                                                  </List.Item>
+                                              );
+                                          })}
+                                      </List>
+                                  </Card.Description>
+                              </Segment>
+                          </Segment.Group>
                       </Card.Content>
                   </Card>
               );
