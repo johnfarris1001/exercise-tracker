@@ -8,8 +8,6 @@ function Activities() {
     const { user, setUser } = useOutletContext();
     const { instructors, setInstructors } = useContext(InstructorsContext);
 
-    console.log(instructors);
-
     function addActivity(activity) {
         const newUniqueInstructors = user.unique_instructors.filter((inst) => {
             return inst.id !== activity.instructor.id;
@@ -158,7 +156,7 @@ function Activities() {
 
     if (user) {
         const sortedActivities = user.activities.sort((a, b) =>
-            a.start_time.localeCompare(b.start_time)
+            b.start_time.localeCompare(a.start_time)
         );
         const activitesToDisplay = sortedActivities.map((activity) => {
             return (
