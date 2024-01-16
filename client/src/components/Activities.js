@@ -8,6 +8,8 @@ function Activities() {
     const { user, setUser } = useOutletContext();
     const { instructors, setInstructors } = useContext(InstructorsContext);
 
+    console.log(instructors);
+
     function addActivity(activity) {
         const newUniqueInstructors = user.unique_instructors.filter((inst) => {
             return inst.id !== activity.instructor.id;
@@ -28,11 +30,15 @@ function Activities() {
                         (user) => user.id === activity.user.id
                     )
                 ) {
-                    return inst;
+                    return {
+                        ...inst,
+                        activities: [...inst.activities, activity],
+                    };
                 } else {
                     return {
                         ...inst,
                         unique_users: [...inst.unique_users, activity.user],
+                        activities: [...inst.activities, activity],
                     };
                 }
             } else {
@@ -78,14 +84,18 @@ function Activities() {
             if (inst.id !== activity.instructor.id) {
                 return inst;
             } else {
+                const instructorActivities = inst.activities.filter(
+                    (act) => act.id !== activity.id
+                );
                 if (newUniqueInstructors.find((item) => inst.id === item.id)) {
-                    return inst;
+                    return { ...inst, activities: instructorActivities };
                 } else {
                     return {
                         ...inst,
                         unique_users: inst.unique_users.filter(
                             (item) => item.id !== user.id
                         ),
+                        activities: instructorActivities,
                     };
                 }
             }
@@ -94,11 +104,8 @@ function Activities() {
             if (inst.id !== activity.instructor.id) {
                 return inst;
             } else {
-                const instructorActivities = inst.activities.filter(
-                    (act) => act.id !== activity.id
-                );
                 if (
-                    instructorActivities.some(
+                    inst.activities.some(
                         (act) => act.location.id === activity.location.id
                     )
                 ) {
@@ -123,6 +130,12 @@ function Activities() {
     }
 
     function editActivity(activity) {
+        const oldInstructorId = user.activities.find(
+            (item) => item.id === activity.id
+        ).instructor.id;
+        const oldLocationId = user.activities.find(
+            (item) => item.id === activity.id
+        ).location.id;
         const newActivities = user.activities.map((act) => {
             if (activity.id === act.id) {
                 return activity;
@@ -146,12 +159,101 @@ function Activities() {
             .filter((location) => {
                 return location.id !== activity.location.id;
             });
+        const oldInstWithUser = instructors.map((inst) => {
+            if (inst.id !== oldInstructorId) {
+                return inst;
+            } else {
+                const instructorActivities = inst.activities.filter(
+                    (act) => act.id !== activity.id
+                );
+                if (
+                    [...newUniqueInstructors, activity.instructor].find(
+                        (item) => item.id === inst.id
+                    )
+                ) {
+                    return { ...inst, activities: instructorActivities };
+                } else {
+                    return {
+                        ...inst,
+                        unique_users: inst.unique_users.filter(
+                            (item) => item.id !== user.id
+                        ),
+                        activities: instructorActivities,
+                    };
+                }
+            }
+        });
+        const newInstWithUser = oldInstWithUser.map((inst) => {
+            if (inst.id !== activity.instructor.id) {
+                return inst;
+            } else {
+                if (
+                    user.unique_instructors.find((item) => item.id === inst.id)
+                ) {
+                    return {
+                        ...inst,
+                        activities: [...inst.activities, activity],
+                    };
+                } else {
+                    return {
+                        ...inst,
+                        unique_users: [...inst.unique_users, user],
+                        activities: [...inst.activities, activity],
+                    };
+                }
+            }
+        });
+        const oldInstWithLoc = newInstWithUser.map((inst) => {
+            if (inst.id !== oldInstructorId) {
+                return inst;
+            } else {
+                const instructorActivities = inst.activities.filter(
+                    (act) => act.id !== activity.id
+                );
+                if (
+                    instructorActivities.find(
+                        (item) => item.location.id === oldLocationId
+                    )
+                ) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_locations: inst.unique_locations.filter(
+                            (loc) => loc.id !== oldLocationId
+                        ),
+                    };
+                }
+            }
+        });
+        const newInstWithLoc = oldInstWithLoc.map((inst) => {
+            if (inst.id !== activity.instructor.id) {
+                return inst;
+            } else {
+                if (
+                    inst.unique_locations.find(
+                        (item) => item.id === activity.location.id
+                    )
+                ) {
+                    return inst;
+                } else {
+                    return {
+                        ...inst,
+                        unique_locations: [
+                            ...inst.unique_locations,
+                            activity.location,
+                        ],
+                    };
+                }
+            }
+        });
         setUser({
             ...user,
             activities: newActivities,
             unique_instructors: [...newUniqueInstructors, activity.instructor],
             unique_locations: [...newUniqueLocations, activity.location],
         });
+        setInstructors(newInstWithLoc);
     }
 
     if (user) {
