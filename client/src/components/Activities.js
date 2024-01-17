@@ -8,8 +8,6 @@ function Activities() {
     const { user, setUser } = useOutletContext();
     const { instructors, setInstructors } = useContext(InstructorsContext);
 
-    console.log(instructors);
-
     function addActivity(activity) {
         const newUniqueInstructors = user.unique_instructors.filter((inst) => {
             return inst.id !== activity.instructor.id;
